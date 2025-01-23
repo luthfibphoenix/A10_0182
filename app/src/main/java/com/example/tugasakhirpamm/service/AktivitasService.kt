@@ -25,8 +25,8 @@ interface AktivitasService{
     suspend fun insertAktivitas(aktivitas: Aktivitas)
 
     @PUT("/api/aktivitas_pertanian/{id}")
-    suspend fun updateMahasiswa(@Query("id")nim: String,@Body aktivitas: Aktivitas)
+    suspend fun updateAktivitas(@Query("id")id: String,@Body aktivitas: Aktivitas)
 
     @DELETE("/api/aktivitas_pertanian/{id}")
-    suspend fun deleteMahasiswa(@Query("id")id: String): retrofit2.Response<Void>
+    suspend fun deleteAktivitas(@Query("id")id: String): retrofit2.Response<Void>
 }
