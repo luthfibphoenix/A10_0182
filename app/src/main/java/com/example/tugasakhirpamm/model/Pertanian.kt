@@ -19,7 +19,7 @@ data class Tanaman(
 )
 
 @Serializable
-data class pekerja(
+data class Pekerja(
     @SerialName("id_pekerja")
     val id_pekerja : String,
 
@@ -30,7 +30,7 @@ data class pekerja(
 )
 
 @Serializable
-data class aktivitas(
+data class Aktivitas(
     @SerialName("id_aktivitas")
     val id_aktivitas : String,
 
@@ -48,7 +48,7 @@ data class aktivitas(
 )
 
 @Serializable
-data class catatan(
+data class Catatan(
     @SerialName("id_panen")
     val id_panen : String,
 
