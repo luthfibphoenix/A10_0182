@@ -47,3 +47,20 @@ data class aktivitas(
     val deskripsi_aktivitas : String,
 )
 
+@Serializable
+data class catatan(
+    @SerialName("id_panen")
+    val id_panen : String,
+
+    @SerialName("id_tanaman")
+    val id_tanaman : String,
+
+    @SerialName("tanggal_panen")
+    val tanggal_panen : String,
+
+    @SerialName("jumlah_panen")
+    val jumlah_panen : String,
+
+    val keterangan : String,
+)
+
