@@ -28,3 +28,22 @@ data class pekerja(
 
     val jabatan : String
 )
+
+@Serializable
+data class aktivitas(
+    @SerialName("id_aktivitas")
+    val id_aktivitas : String,
+
+    @SerialName("id_tanaman")
+    val id_tanaman : String,
+
+    @SerialName("id_pekerja")
+    val id_pekerja : String,
+
+    @SerialName("tanggal_aktivitas")
+    val tanggal_aktivitas : String,
+
+    @SerialName("deskripsi_aktivitas")
+    val deskripsi_aktivitas : String,
+)
+
