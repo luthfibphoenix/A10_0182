@@ -17,3 +17,14 @@ data class Tanaman(
     @SerialName("deskripsi_tanaman")
     val deskripsi_tanaman : String,
 )
+
+@Serializable
+data class pekerja(
+    @SerialName("id_pekerja")
+    val id_pekerja : String,
+
+    @SerialName("nama_pekerja")
+    val nama_pekerja : String,
+
+    val jabatan : String
+)
