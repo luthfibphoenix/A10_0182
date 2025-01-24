@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed class HomeUiState{
-    data class Success(val listTanaman: List<Tanaman>) : HomeUiState()
+    data class Success(val Tanaman: List<Tanaman>) : HomeUiState()
     object Error : HomeUiState()
     object Loading : HomeUiState()
 }
