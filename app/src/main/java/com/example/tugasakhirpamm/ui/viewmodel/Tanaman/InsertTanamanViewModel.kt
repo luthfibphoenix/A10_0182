@@ -9,7 +9,7 @@ import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.repository.TanamanRepository
 import kotlinx.coroutines.launch
 
-class InsertViewModel(private val tanamanRepository: TanamanRepository) : ViewModel() {
+class InsertTanamanViewModel(private val tanamanRepository: TanamanRepository) : ViewModel() {
 
     var uiState by mutableStateOf(InsertUiState())
         private set
@@ -30,10 +30,10 @@ class InsertViewModel(private val tanamanRepository: TanamanRepository) : ViewMo
 }
 
 fun InsertUiEvent.toTanaman(): Tanaman = Tanaman(
-    id_tanaman = this.idTanaman,
-    nama_tanaman = this.namaTanaman,
-    periode_tanaman = this.periodeTanaman,
-    deskripsi_tanaman = this.deskripsiTanaman
+    id_tanaman = idTanaman,
+    nama_tanaman = namaTanaman,
+    periode_tanaman = periodeTanaman,
+    deskripsi_tanaman = deskripsiTanaman
 )
 
 fun Tanaman.toUiStateTanaman(): InsertUiState = InsertUiState(

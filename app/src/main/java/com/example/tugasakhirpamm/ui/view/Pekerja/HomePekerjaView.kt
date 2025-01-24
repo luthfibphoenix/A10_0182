@@ -1,12 +1,5 @@
-package com.example.tugasakhirpamm.ui.view.Tanaman
+package com.example.tugasakhirpamm.ui.view.Pekerja
 
-import com.example.tugasakhirpamm.R
-import com.example.tugasakhirpamm.model.Tanaman
-import com.example.tugasakhirpamm.ui.PenyediaViewModel
-import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
-import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeTanamanViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeUiState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,30 +36,43 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tugasakhirpamm.R
+import com.example.tugasakhirpamm.model.Pekerja
+import com.example.tugasakhirpamm.model.Tanaman
+import com.example.tugasakhirpamm.ui.PenyediaViewModel
+import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
+import com.example.tugasakhirpamm.ui.view.Tanaman.HomeStatus
+import com.example.tugasakhirpamm.ui.view.Tanaman.TanamanLayout
+import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.HomePekerjaUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.HomePekerjaViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeTanamanViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeUiState
 
-object DestinasiHomeTamaman: DestinasiNavigasi {
+
+object DestinasiHomePekerja: DestinasiNavigasi {
     override val route ="home"
-    override val titleRes = "Home Tanaman"
+    override val titleRes = "Home Pekerja"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeViewTanaman(
-    navigateToItemEntry:()->Unit,
-    modifier: Modifier =Modifier,
-    onDetailClick: (String) -> Unit ={},
-    viewModel: HomeTanamanViewModel = viewModel(factory = PenyediaViewModel.Factory)
-){
+fun HomeViewPekerja(
+    navigateToItemEntry: () -> Unit,
+    modifier: Modifier = Modifier,
+    onDetailClick: (String) -> Unit = {},
+    viewModel: HomePekerjaViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiHomeTamaman.titleRes,
+                title = DestinasiHomePekerja.titleRes,
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
                 onRefresh = {
-                    viewModel.getTanaman()
+                    viewModel.getpekerja()
                 }
             )
         },
@@ -76,51 +82,61 @@ fun HomeViewTanaman(
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(18.dp)
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Tanaman")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Pekerja")
             }
         },
-    ) { innerPadding->
-        HomeStatus(
-            homeUiState = viewModel.tanamanUiState,
-            retryAction = {viewModel.getTanaman()}, modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailClick,onDeleteClick = {
-                viewModel.deleteTanaman(it.id_tanaman)
-                viewModel.getTanaman()
+    ) { innerPadding ->
+        HomePekerjaStatus(
+            homePekerjaUiState = viewModel.pekerjaUiState,
+            retryAction = { viewModel.getpekerja() },
+            modifier = Modifier.padding(innerPadding),
+            onDetailClick = onDetailClick,
+            onDeleteClick = { pekerja ->
+                viewModel.deletePekerja(pekerja.id_pekerja)
+                viewModel.getpekerja()
             }
         )
     }
 }
 
+
 @Composable
-fun HomeStatus(
-    homeUiState: HomeUiState,
+fun HomePekerjaStatus(
+    homePekerjaUiState: HomePekerjaUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
-    onDeleteClick: (Tanaman) -> Unit = {},
+    onDeleteClick: (Pekerja) -> Unit = {},
     onDetailClick: (String) -> Unit
-){
-    when (homeUiState){
-        is HomeUiState.Loading-> OnLoading(modifier = modifier.fillMaxSize())
-
-        is HomeUiState.Success ->
-            if(homeUiState.Tanaman.isEmpty()){
-                return Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-                    Text(text = "Tidak ada data Tanaman")
+) {
+    when (homePekerjaUiState) {
+        is HomePekerjaUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+        is HomePekerjaUiState.Success ->
+            if (homePekerjaUiState.Pekerja.isEmpty()) {
+                Box(
+                    modifier = modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "Tidak ada data Pekerja")
                 }
-            }else{
-                TanamanLayout(
-                    tanaman = homeUiState.Tanaman,modifier = modifier.fillMaxWidth(),
+            } else {
+                PekerjaLayout(
+                    pekerja = homePekerjaUiState.Pekerja,
+                    modifier = modifier.fillMaxWidth(),
                     onDetailClick = {
-                        onDetailClick(it.id_tanaman)
+                        onDetailClick(it.id_pekerja)
                     },
-                    onDeleteClick={
-                        onDeleteClick(it)
+                    onDeleteClick = { pekerja ->
+                        onDeleteClick(pekerja)
                     }
                 )
             }
-        is HomeUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+        is HomePekerjaUiState.Error -> OnError(
+            retryAction,
+            modifier = modifier.fillMaxSize()
+        )
     }
 }
+
 
 @Composable
 fun OnLoading(modifier: Modifier = Modifier){
@@ -149,26 +165,27 @@ fun OnError(retryAction:()->Unit, modifier: Modifier = Modifier){
     }
 }
 
+
 @Composable
-fun TanamanLayout(
-    tanaman: List<Tanaman>,
+fun PekerjaLayout(
+    pekerja: List<Pekerja>,
     modifier: Modifier = Modifier,
-    onDetailClick:(Tanaman)->Unit,
-    onDeleteClick: (Tanaman) -> Unit = {}
+    onDetailClick:(Pekerja)->Unit,
+    onDeleteClick: (Pekerja) -> Unit = {}
 ){
     LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(tanaman){ tanaman ->
-            TanamanCard(
-                tanaman = tanaman,
+        items(pekerja){ kontak ->
+            PekerjaCard(
+                pekerja = kontak,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable{onDetailClick(tanaman)},
+                    .clickable{onDetailClick(kontak)},
                 onDeleteClick ={
-                    onDeleteClick(tanaman)
+                    onDeleteClick(kontak)
                 }
             )
 
@@ -177,10 +194,10 @@ fun TanamanLayout(
 }
 
 @Composable
-fun TanamanCard(
-    tanaman: Tanaman,
+fun PekerjaCard(
+    pekerja: Pekerja,
     modifier: Modifier = Modifier,
-    onDeleteClick:(Tanaman)->Unit={}
+    onDeleteClick:(Pekerja)->Unit={}
 ){
     Card(
         modifier = modifier,
@@ -196,11 +213,11 @@ fun TanamanCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = tanaman.nama_tanaman,
+                    text = pekerja.nama_pekerja,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(Modifier.weight(1f))
-                IconButton(onClick = {onDeleteClick(tanaman)}) {
+                IconButton(onClick = {onDeleteClick(pekerja)}) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
@@ -208,19 +225,14 @@ fun TanamanCard(
                 }
 
                 Text(
-                    text = tanaman.id_tanaman,
+                    text = pekerja.id_pekerja,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = pekerja.jabatan,
                     style = MaterialTheme.typography.titleMedium
                 )
             }
-
-            Text(
-                text = tanaman.deskripsi_tanaman,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = tanaman.periode_tanaman,
-                style = MaterialTheme.typography.titleMedium
-            )
         }
     }
 }

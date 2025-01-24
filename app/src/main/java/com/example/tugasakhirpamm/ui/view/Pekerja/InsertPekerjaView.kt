@@ -1,4 +1,4 @@
-package com.example.tugasakhirpamm.ui.view.Tanaman
+package com.example.tugasakhirpamm.ui.view.Pekerja
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,31 +23,32 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertTanamanViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertPekerjaViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertUiEventPekerja
+import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertUiState
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertUiEvent
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertUiState
 import kotlinx.coroutines.launch
 
-object DestinasiInsert: DestinasiNavigasi {
+object DestinasiInsertPekerja : DestinasiNavigasi {
     override val route = "item_entry"
-    override val titleRes = "Insert Tamaman"
-
+    override val titleRes = "Insert Pekerja"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InsertTanamanScreen(
-    navigateBack:()->Unit,
+fun InsertPekerjaScreen(
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: InsertTanamanViewModel = viewModel(factory = PenyediaViewModel.Factory)
-){
+    viewModel: InsertPekerjaViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiInsert.titleRes,
+                title = DestinasiInsertPekerja.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack
@@ -56,11 +57,13 @@ fun InsertTanamanScreen(
     ) { innerPadding ->
         EntryBody(
             insertUiState = viewModel.uiState,
-            onTanamanValueChange = viewModel::updateTanamanState,
+            onPekerjaValueChange = viewModel::updatePekerjaState,
             onSaveClick = {
                 coroutineScope.launch {
-                    viewModel.insertTanaman()
-                    navigateBack()
+                    viewModel.insertPekerja(
+                        onSuccess = navigateBack,
+                        onError = { /* Handle error (e.g., show a snackbar or toast) */ }
+                    )
                 }
             },
             modifier = Modifier
@@ -73,80 +76,71 @@ fun InsertTanamanScreen(
 
 @Composable
 fun EntryBody(
-    insertUiState: InsertUiState,
-    onTanamanValueChange: (InsertUiEvent) -> Unit,
+    insertUiState: InsertUiState, // From Pekerja ViewModel
+    onPekerjaValueChange: (InsertUiEventPekerja) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(18.dp),
-        modifier = modifier.padding(12.dp)
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         FormInput(
-            insertUiEvent = insertUiState.insertUiEvent,
-            onValueChange = onTanamanValueChange,
+            insertUiEvent = insertUiState.insertUiEventPkr, // Correct reference
+            onValueChange = onPekerjaValueChange,
             modifier = Modifier.fillMaxWidth()
         )
+
         Button(
             onClick = onSaveClick,
-            shape = MaterialTheme.shapes.small,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Simpan")
+            Text("Save")
         }
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
 fun FormInput(
-    insertUiEvent: InsertUiEvent,
+    insertUiEvent: InsertUiEventPekerja,
     modifier: Modifier = Modifier,
-    onValueChange:(InsertUiEvent)->Unit = {},
+    onValueChange: (InsertUiEventPekerja) -> Unit = {},
     enabled: Boolean = true
-){
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         OutlinedTextField(
-            value = insertUiEvent.idTanaman,
-            onValueChange = {onValueChange(insertUiEvent.copy(idTanaman = it))},
-            label = { Text("ID Tanaman") },
+            value = insertUiEvent.idPekerja,
+            onValueChange = { onValueChange(insertUiEvent.copy(idPekerja = it)) },
+            label = { Text("ID Pekerja") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
         )
 
         OutlinedTextField(
-            value = insertUiEvent.namaTanaman,
-            onValueChange = {onValueChange(insertUiEvent.copy(namaTanaman = it))},
-            label = { Text("Nama Tanaman") },
+            value = insertUiEvent.namaPekerja,
+            onValueChange = { onValueChange(insertUiEvent.copy(namaPekerja = it)) },
+            label = { Text("Nama Pekerja") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
         )
 
         OutlinedTextField(
-            value = insertUiEvent.periodeTanaman,
-            onValueChange = {onValueChange(insertUiEvent.copy(periodeTanaman = it))},
-            label = { Text("Periode Tanaman") },
+            value = insertUiEvent.jabatan,
+            onValueChange = { onValueChange(insertUiEvent.copy(jabatan = it)) },
+            label = { Text("Jabatan") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
         )
 
-        OutlinedTextField(
-            value = insertUiEvent.deskripsiTanaman,
-            onValueChange = {onValueChange(insertUiEvent.copy(deskripsiTanaman = it))},
-            label = { Text("Deskripsi Tanaman") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        if (enabled){
+        if (enabled) {
             Text(
                 text = "Isi Semua Data!",
                 modifier = Modifier.padding(12.dp)
@@ -157,6 +151,6 @@ fun FormInput(
             thickness = 8.dp,
             modifier = Modifier.padding(12.dp)
         )
-
     }
 }
+

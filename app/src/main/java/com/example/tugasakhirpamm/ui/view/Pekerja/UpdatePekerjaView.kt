@@ -1,4 +1,4 @@
-package com.example.tugasakhirpamm.ui.view.Tanaman
+package com.example.tugasakhirpamm.ui.view.Pekerja
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,52 +13,58 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.UpdateTanamanViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.UpdatePekerjaViewModel
 import kotlinx.coroutines.launch
 
-object DestinasiTanamanUpdate : DestinasiNavigasi {
+object DestinasiPekerjaUpdate : DestinasiNavigasi {
     override val route = "update"
-    override val titleRes = "Update Tanaman"
-    const val TANAMAN = "id Tanaman"
-    val routeWithArg = "$route/{$TANAMAN}"
+    override val titleRes = "Update Pekerja" // Updated title to reflect 'Pekerja'
+    const val PEKERJA = "id Pekerja"
+    val routeWithArg = "$route/{$PEKERJA}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpdateScreen(
+fun UpdatePekerjaScreen(
     modifier: Modifier = Modifier,
-    viewModel: UpdateTanamanViewModel = viewModel(factory = PenyediaViewModel.Factory),
+    viewModel: UpdatePekerjaViewModel = viewModel(factory = PenyediaViewModel.Factory),
     navigateBack: () -> Unit,
     onNavigate: () -> Unit
-){
+) {
+    // Access the UI state from the ViewModel
     val insertUiState = viewModel.uiState
     val coroutineScope = rememberCoroutineScope()
 
-    Scaffold (
-        modifier = Modifier,
+    // Scaffold for UI layout
+    Scaffold(
+        modifier = modifier,
         topBar = {
+            // Custom top bar for navigation
             CostumeTopAppBar(
-                title = DestinasiTanamanUpdate.titleRes,
+                title = DestinasiPekerjaUpdate.titleRes,
                 canNavigateBack = true,
                 navigateUp = navigateBack
             )
         }
-    ){
-        padding ->
-        Column (
+    ) { padding ->
+        // Column that holds the form
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
                 .padding(15.dp)
-        ){
+        ) {
+            // Body that displays the form and save button
             EntryBody(
                 insertUiState = insertUiState,
-                onTanamanValueChange = { updateEvent ->
+                onPekerjaValueChange = { updateEvent ->
+                    // Update state in ViewModel
                     viewModel.updateState(updateEvent)
                 },
                 onSaveClick = {
                     coroutineScope.launch {
-                        viewModel.updateTanaman()
+                        // Update pekerja and navigate back
+                        viewModel.updatePekerja()
                         onNavigate()
                     }
                 }
