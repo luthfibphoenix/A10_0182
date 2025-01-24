@@ -15,18 +15,18 @@ interface AktivitasService{
         "Content-Type: application/json",
     )
 
-    @GET("/api/aktivitas_pertanian")
+    @GET("/aktivitas_pertanian")
     suspend fun getAktivitas(): List<Aktivitas>
 
-    @GET("/api/aktivitas_pertanian/{id}")
+    @GET("/aktivitas_pertanian/{id}")
     suspend fun getAktivitasById(id: String): Aktivitas
 
-    @POST("/api/aktivitas_pertanian")
+    @POST("/aktivitas_pertanian")
     suspend fun insertAktivitas(aktivitas: Aktivitas)
 
-    @PUT("/api/aktivitas_pertanian/{id}")
+    @PUT("/aktivitas_pertanian/{id}")
     suspend fun updateAktivitas(@Query("id")id: String,@Body aktivitas: Aktivitas)
 
-    @DELETE("/api/aktivitas_pertanian/{id}")
+    @DELETE("/aktivitas_pertanian/{id}")
     suspend fun deleteAktivitas(@Query("id")id: String): retrofit2.Response<Void>
 }

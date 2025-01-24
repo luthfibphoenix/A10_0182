@@ -17,12 +17,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPekerjaViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailUiState
 
-object DestinasiDetailPekerja {
-    const val route = "item_detail"
+object DestinasiDetailPekerja : DestinasiNavigasi {
+    override val route = "item_detail"
+    override val titleRes = "Detail Pekerja"
     const val PEKERJA = "idPekerja"
+    val routeWithArg = "$route/{$PEKERJA}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

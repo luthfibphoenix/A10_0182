@@ -36,7 +36,7 @@ class UpdatePekerjaViewModel(
         }
     }
 
-    fun updatePekerjaState(insertUiEventPkr: InsertUiEventPekerja) {
+    fun updateState(insertUiEventPkr: InsertUiEventPekerja) {
         UpdateUiState = InsertUiStatePkr(
             insertUiEventPkr = insertUiEventPkr
         )

@@ -25,7 +25,7 @@ import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertPekerjaViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertUiEventPekerja
-import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertUiStatePkr
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertUiEvent
 import kotlinx.coroutines.launch
 
@@ -76,7 +76,7 @@ fun InsertPekerjaScreen(
 
 @Composable
 fun EntryBody(
-    insertUiState: InsertUiState, // From Pekerja ViewModel
+    insertUiState: InsertUiStatePkr, // From Pekerja ViewModel
     onPekerjaValueChange: (InsertUiEventPekerja) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier

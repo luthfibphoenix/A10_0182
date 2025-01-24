@@ -32,7 +32,7 @@ fun UpdatePekerjaScreen(
     onNavigate: () -> Unit
 ) {
     // Access the UI state from the ViewModel
-    val insertUiState = viewModel.uiState
+    val insertUiState = viewModel.UpdateUiState
     val coroutineScope = rememberCoroutineScope()
 
     // Scaffold for UI layout

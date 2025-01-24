@@ -25,7 +25,7 @@ interface AppContainer {
 }
 
 class PertanianContainer : AppContainer {
-    private val baseUrl = "http://10.0.2.2:83/api/kangpijat/"
+    private val baseUrl = "http://10.0.2.2:3000/api/pertanian/"
     private val json = Json { ignoreUnknownKeys = true }
     private val retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
