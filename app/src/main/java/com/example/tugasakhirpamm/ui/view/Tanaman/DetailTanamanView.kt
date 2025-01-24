@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.model.Tanaman
+import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.DetailTanamanViewModel
@@ -34,7 +35,7 @@ fun DetailViewTanaman(
     navigateBack: () -> Unit,
     navigateToEdit: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: DetailTanamanViewModel = viewModel(factory = DetailTanamanViewModel.Factory)
+    viewModel: DetailTanamanViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
@@ -96,7 +97,7 @@ fun BodyDetailTanaman(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = detailUiState.Error,
+                        text = "An error occurred. Please try again.",
                         color = Color.Red
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -106,6 +107,7 @@ fun BodyDetailTanaman(
                 }
             }
         }
+
 
         is DetailUiState.Success -> {
             Column(
