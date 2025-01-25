@@ -18,6 +18,7 @@ sealed class HomeUiState{
 }
 
 class HomeTanamanViewModel(private val tanaman: TanamanRepository): ViewModel(){
+
     var tanamanUiState: HomeUiState by mutableStateOf(HomeUiState.Loading)
         private set
 
@@ -29,7 +30,7 @@ class HomeTanamanViewModel(private val tanaman: TanamanRepository): ViewModel(){
         viewModelScope.launch {
             tanamanUiState = HomeUiState.Loading
             tanamanUiState = try {
-                HomeUiState.Success(tanaman.getTanaman())
+                HomeUiState.Success(tanaman.getTanaman().data)
             } catch (e: IOException){
                 HomeUiState.Error
             } catch (e: HttpException){

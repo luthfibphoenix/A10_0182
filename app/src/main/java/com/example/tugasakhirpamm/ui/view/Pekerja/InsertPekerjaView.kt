@@ -30,7 +30,7 @@ import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertUiEvent
 import kotlinx.coroutines.launch
 
 object DestinasiInsertPekerja : DestinasiNavigasi {
-    override val route = "item_entry"
+    override val route = "insert_pekerja"
     override val titleRes = "Insert Pekerja"
 }
 

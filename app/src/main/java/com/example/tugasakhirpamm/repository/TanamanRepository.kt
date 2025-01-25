@@ -1,10 +1,11 @@
 package com.example.tugasakhirpamm.repository
 
+import com.example.tugasakhirpamm.model.AllTanamanResponse
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.service.TanamanService
 
 interface TanamanRepository {
-    suspend fun getTanaman(): List<Tanaman>
+    suspend fun getTanaman(): AllTanamanResponse
     suspend fun insertTanaman(tanaman: Tanaman)
     suspend fun updateTanaman(idTanaman: String, tanaman: Tanaman) // String
     suspend fun deleteTanaman(idTanaman: String) // String
@@ -15,12 +16,13 @@ class NetworkTanamanRepository(
     private val tanamanApiService: TanamanService
 ) : TanamanRepository {
 
-    override suspend fun getTanaman(): List<Tanaman> {
+    override suspend fun getTanaman(): AllTanamanResponse {
+        println(tanamanApiService.getTanaman())
         return tanamanApiService.getTanaman()
     }
 
     override suspend fun getTanamanById(idTanaman: String): Tanaman {
-        return tanamanApiService.getTanamanById(idTanaman)
+        return tanamanApiService.getTanamanById(idTanaman).data
     }
 
     override suspend fun insertTanaman(tanaman: Tanaman) {

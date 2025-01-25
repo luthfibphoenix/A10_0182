@@ -69,12 +69,14 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
+
 // Retrofit
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.retrofit)
     implementation(libs.okhttp)
     implementation(libs.coil.compose)
     implementation(libs.kotlinx.serialization.json)
+
 
 
 

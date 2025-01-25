@@ -1,10 +1,11 @@
 package com.example.tugasakhirpamm.repository
 
 import com.example.tugasakhirpamm.model.Aktivitas
+import com.example.tugasakhirpamm.model.AllAktivitasResponse
 import com.example.tugasakhirpamm.service.AktivitasService
 
 interface AktivitasRepository {
-    suspend fun getAktivitas(): List<Aktivitas>
+    suspend fun getAktivitas(): AllAktivitasResponse
     suspend fun insertAktivitas(aktivitas: Aktivitas)
     suspend fun updateAktivitas(idAktivitas: String, aktivitas: Aktivitas) // String
     suspend fun deleteAktivitas(idAktivitas: String) // String
@@ -15,12 +16,13 @@ class NetworkAktivitasRepository(
     private val aktivitasApiService: AktivitasService
 ) : AktivitasRepository{
 
-    override suspend fun getAktivitas(): List<Aktivitas> {
+    override suspend fun getAktivitas(): AllAktivitasResponse {
+        println(aktivitasApiService.getAktivitas())
         return aktivitasApiService.getAktivitas()
     }
 
     override suspend fun getAktivitasById(idAktivitas: String): Aktivitas {
-        return aktivitasApiService.getAktivitasById(idAktivitas)
+        return aktivitasApiService.getAktivitasById(idAktivitas).data
     }
 
     override suspend fun insertAktivitas(aktivitas: Aktivitas) {

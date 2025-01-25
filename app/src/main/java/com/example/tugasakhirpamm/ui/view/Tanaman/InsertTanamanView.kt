@@ -28,8 +28,8 @@ import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertUiEvent
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertUiState
 import kotlinx.coroutines.launch
 
-object DestinasiInsert: DestinasiNavigasi {
-    override val route = "item_entry"
+object DestinasiInsertTanaman: DestinasiNavigasi {
+    override val route = "insert_tanaman"
     override val titleRes = "Insert Tamaman"
 
 }
@@ -47,7 +47,7 @@ fun InsertTanamanScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiInsert.titleRes,
+                title = DestinasiInsertTanaman.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack

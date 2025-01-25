@@ -37,7 +37,7 @@ class NetworkPekerjaRepository(
         try{
             val response = pekerjaApiService.deletePekerja(idPekerja)
             if (!response.isSuccessful){
-                throw Exception("Failed to delete mahasiswa. HTTP Status code: " + "${response.code()}")
+                throw Exception("Failed to delete Pekerja. HTTP Status code: " + "${response.code()}")
             }else{
                 response.message()
                 println(response.message())

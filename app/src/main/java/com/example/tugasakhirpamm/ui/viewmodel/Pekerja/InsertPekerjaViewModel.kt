@@ -41,7 +41,7 @@ fun InsertUiEventPekerja.toPekerja(): Pekerja = Pekerja(
 )
 
 fun Pekerja.toUiStatePekerja(): InsertUiStatePkr = InsertUiStatePkr(
-    insertUiEventPkr = this.toInsertUiEvent()
+    insertUiEventPkr = this.toInsertUiEventPkr()
 )
 
 data class InsertUiEventPekerja(
@@ -50,7 +50,7 @@ data class InsertUiEventPekerja(
     val jabatan: String = ""
 )
 
-fun Pekerja.toInsertUiEvent(): InsertUiEventPekerja = InsertUiEventPekerja(
+fun Pekerja.toInsertUiEventPkr(): InsertUiEventPekerja = InsertUiEventPekerja(
     idPekerja = id_pekerja,
     namaPekerja = nama_pekerja,
     jabatan = jabatan

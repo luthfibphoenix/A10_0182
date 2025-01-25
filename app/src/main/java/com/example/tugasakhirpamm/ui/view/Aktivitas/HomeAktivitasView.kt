@@ -1,5 +1,8 @@
-package com.example.tugasakhirpamm.ui.view.Pekerja
+package com.example.tugasakhirpamm.ui.view.Aktivitas
 
+import com.example.tugasakhirpamm.model.Aktivitas
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.HomeAktivitasUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.HomeAktivitasViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,44 +45,37 @@ import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.view.Tanaman.HomeStatus
-import com.example.tugasakhirpamm.ui.view.Tanaman.TanamanLayout
-import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.HomePekerjaUiState
-import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.HomePekerjaViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeTanamanViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeUiState
 
-
-object DestinasiHomePekerja: DestinasiNavigasi {
-    override val route ="home_pekerja"
-    override val titleRes = "Home Pekerja"
+object DestinasiHomeAktivitas: DestinasiNavigasi {
+    override val route ="home_aktivitas"
+    override val titleRes = "Home Aktivitas"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeViewPekerja(
-    navigateToItemEntryPekerja: () -> Unit,
+fun HomeViewAktivitas(
+    navigateToItemEntryAktivitas: () -> Unit,
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    onDetailPekerjaClick: (String) -> Unit = {},
-    viewModel: HomePekerjaViewModel = viewModel(factory = PenyediaViewModel.Factory)
+    onDetailAktivitasClick: (String) -> Unit = {},
+    viewModel: HomeAktivitasViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiHomePekerja.titleRes,
+                title = DestinasiHomeAktivitas.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 onRefresh = {
-                    viewModel.getpekerja()
+                    viewModel.getAktivitas()
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = navigateToItemEntryPekerja,
+                onClick = navigateToItemEntryAktivitas,
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(18.dp)
             ) {
@@ -87,14 +83,14 @@ fun HomeViewPekerja(
             }
         },
     ) { innerPadding ->
-        HomePekerjaStatus(
-            homePekerjaUiState = viewModel.pekerjaUiState,
-            retryAction = { viewModel.getpekerja() },
+        HomeAktivitasStatus(
+            homeAktivitasUiState = viewModel.aktivitasUiState,
+            retryAction = { viewModel.getAktivitas() },
             modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailPekerjaClick,
-            onDeleteClick = { pekerja ->
-                viewModel.deletePekerja(pekerja.id_pekerja)
-                viewModel.getpekerja()
+            onDetailClick = onDetailAktivitasClick,
+            onDeleteClick = { aktivitas ->
+                viewModel.deleteAktivitas(aktivitas.id_aktivitas)
+                viewModel.getAktivitas()
             }
         )
     }
@@ -102,36 +98,36 @@ fun HomeViewPekerja(
 
 
 @Composable
-fun HomePekerjaStatus(
-    homePekerjaUiState: HomePekerjaUiState,
+fun HomeAktivitasStatus(
+    homeAktivitasUiState: HomeAktivitasUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
-    onDeleteClick: (Pekerja) -> Unit = {},
+    onDeleteClick: (Aktivitas) -> Unit = {},
     onDetailClick: (String) -> Unit
 ) {
-    when (homePekerjaUiState) {
-        is HomePekerjaUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
-        is HomePekerjaUiState.Success ->
-            if (homePekerjaUiState.Pekerja.isEmpty()) {
+    when (homeAktivitasUiState) {
+        is HomeAktivitasUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+        is HomeAktivitasUiState.Success ->
+            if (homeAktivitasUiState.Aktivitas.isEmpty()) {
                 Box(
                     modifier = modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Tidak ada data Pekerja")
+                    Text(text = "Tidak ada data Aktivitas")
                 }
             } else {
-                PekerjaLayout(
-                    pekerja = homePekerjaUiState.Pekerja,
+                AktivitasLayout(
+                    aktivitas = homeAktivitasUiState.Aktivitas,
                     modifier = modifier.fillMaxWidth(),
                     onDetailClick = {
-                        onDetailClick(it.id_pekerja)
+                        onDetailClick(it.id_aktivitas)
                     },
-                    onDeleteClick = { pekerja ->
-                        onDeleteClick(pekerja)
+                    onDeleteClick = { Aktivitas ->
+                        onDeleteClick(Aktivitas)
                     }
                 )
             }
-        is HomePekerjaUiState.Error -> OnError(
+        is HomeAktivitasUiState.Error -> OnError(
             retryAction,
             modifier = modifier.fillMaxSize()
         )
@@ -168,20 +164,20 @@ fun OnError(retryAction:()->Unit, modifier: Modifier = Modifier){
 
 
 @Composable
-fun PekerjaLayout(
-    pekerja: List<Pekerja>,
+fun AktivitasLayout(
+    aktivitas: List<Aktivitas>,
     modifier: Modifier = Modifier,
-    onDetailClick:(Pekerja)->Unit,
-    onDeleteClick: (Pekerja) -> Unit = {}
+    onDetailClick:(Aktivitas)->Unit,
+    onDeleteClick: (Aktivitas) -> Unit = {}
 ){
     LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(pekerja){ kontak ->
-            PekerjaCard(
-                pekerja = kontak,
+        items(aktivitas){ kontak ->
+            AktivitasCard(
+                aktivitas = kontak,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable{onDetailClick(kontak)},
@@ -195,10 +191,10 @@ fun PekerjaLayout(
 }
 
 @Composable
-fun PekerjaCard(
-    pekerja: Pekerja,
+fun AktivitasCard(
+    aktivitas: Aktivitas,
     modifier: Modifier = Modifier,
-    onDeleteClick:(Pekerja)->Unit={}
+    onDeleteClick:(Aktivitas)->Unit={}
 ){
     Card(
         modifier = modifier,
@@ -214,25 +210,26 @@ fun PekerjaCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = pekerja.nama_pekerja,
+                    text = aktivitas.id_aktivitas,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(Modifier.weight(1f))
-                IconButton(onClick = {onDeleteClick(pekerja)}) {
+                Text(
+                    text = aktivitas.tanggal_aktivitas,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = aktivitas.deskripsi_aktivitas,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(Modifier.weight(1f))
+                IconButton(onClick = {onDeleteClick(aktivitas)}) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
                     )
                 }
-
-                Text(
-                    text = pekerja.id_pekerja,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
-                    text = pekerja.jabatan,
-                    style = MaterialTheme.typography.titleMedium
-                )
             }
         }
     }

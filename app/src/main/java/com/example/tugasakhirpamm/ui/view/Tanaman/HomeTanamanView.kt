@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 object DestinasiHomeTamaman: DestinasiNavigasi {
-    override val route ="home"
+    override val route ="home_tanaman"
     override val titleRes = "Home Tanaman"
 }
 
@@ -53,8 +53,9 @@ object DestinasiHomeTamaman: DestinasiNavigasi {
 @Composable
 fun HomeViewTanaman(
     navigateToItemEntry:()->Unit,
+    onBackClick: () -> Unit = {},
     modifier: Modifier =Modifier,
-    onDetailClick: (String) -> Unit ={},
+    onDetailTanamanClick: (String) -> Unit ={},
     viewModel: HomeTanamanViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ){
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -63,7 +64,7 @@ fun HomeViewTanaman(
         topBar = {
             CostumeTopAppBar(
                 title = DestinasiHomeTamaman.titleRes,
-                canNavigateBack = false,
+                canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 onRefresh = {
                     viewModel.getTanaman()
@@ -83,7 +84,7 @@ fun HomeViewTanaman(
         HomeStatus(
             homeUiState = viewModel.tanamanUiState,
             retryAction = {viewModel.getTanaman()}, modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailClick,onDeleteClick = {
+            onDetailClick = onDetailTanamanClick,onDeleteClick = {
                 viewModel.deleteTanaman(it.id_tanaman)
                 viewModel.getTanaman()
             }

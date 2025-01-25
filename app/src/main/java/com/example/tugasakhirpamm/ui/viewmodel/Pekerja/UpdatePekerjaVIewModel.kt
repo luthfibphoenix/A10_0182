@@ -44,5 +44,5 @@ class UpdatePekerjaViewModel(
 }
 
 fun Pekerja.toUiStatePkrUpdate() = InsertUiStatePkr(
-    insertUiEventPkr = this.toInsertUiEvent()
+    insertUiEventPkr = this.toInsertUiEventPkr()
 )

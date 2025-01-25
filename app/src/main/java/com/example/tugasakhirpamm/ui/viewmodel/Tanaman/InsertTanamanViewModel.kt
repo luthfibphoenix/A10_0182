@@ -37,7 +37,7 @@ fun InsertUiEvent.toTanaman(): Tanaman = Tanaman(
 )
 
 fun Tanaman.toUiStateTanaman(): InsertUiState = InsertUiState(
-    insertUiEvent = this.toInsertUiEvent()
+    insertUiEvent = this.toInsertUiEventTnm()
 )
 
 data class InsertUiEvent(
@@ -47,7 +47,7 @@ data class InsertUiEvent(
     val deskripsiTanaman: String = ""
 )
 
-fun Tanaman.toInsertUiEvent(): InsertUiEvent = InsertUiEvent(
+fun Tanaman.toInsertUiEventTnm(): InsertUiEvent = InsertUiEvent(
     idTanaman = id_tanaman,
     namaTanaman = nama_tanaman,
     periodeTanaman = periode_tanaman,

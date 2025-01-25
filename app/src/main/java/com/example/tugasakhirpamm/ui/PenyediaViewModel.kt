@@ -7,6 +7,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.tugasakhirpamm.PertanianApp
 import com.example.tugasakhirpamm.PertanianApplications
+import com.example.tugasakhirpamm.ui.view.Aktivitas.DetailViewAktivitas
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailAktivitasViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.HomeAktivitasViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.InsertAktivitasViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.UpdateAktivitasViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPekerjaViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.HomePekerjaViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertPekerjaViewModel
@@ -27,6 +32,10 @@ object PenyediaViewModel{
         initializer { InsertPekerjaViewModel(AplikasiPertanian().container.pekerjaRepository) }
         initializer { DetailPekerjaViewModel(createSavedStateHandle(), AplikasiPertanian().container.pekerjaRepository) }
         initializer { UpdatePekerjaViewModel(createSavedStateHandle(), AplikasiPertanian().container.pekerjaRepository) }
+        initializer { HomeAktivitasViewModel(AplikasiPertanian().container.aktivitasRepository) }
+        initializer { InsertAktivitasViewModel(AplikasiPertanian().container.aktivitasRepository) }
+        initializer { DetailAktivitasViewModel(createSavedStateHandle(), AplikasiPertanian().container.aktivitasRepository) }
+        initializer { UpdateAktivitasViewModel(createSavedStateHandle(), AplikasiPertanian().container.aktivitasRepository) }
     }
 }
 

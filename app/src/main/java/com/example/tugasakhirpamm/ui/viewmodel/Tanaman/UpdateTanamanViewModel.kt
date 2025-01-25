@@ -47,5 +47,5 @@ class UpdateTanamanViewModel(
 }
 
 fun Tanaman.toUiStateTnmUpdate() = InsertUiState(
-    insertUiEvent = this.toInsertUiEvent()
+    insertUiEvent = this.toInsertUiEventTnm()
 )

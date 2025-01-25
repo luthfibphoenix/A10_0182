@@ -19,6 +19,20 @@ data class Tanaman(
 )
 
 @Serializable
+data class AllTanamanResponse(
+    val status: Boolean,
+    val message: String,
+    val data: List<Tanaman>
+)
+
+@Serializable
+data class TanamanDetailResponse(
+    val status: Boolean,
+    val message: String,
+    val data: Tanaman
+)
+
+@Serializable
 data class Pekerja(
     @SerialName("id_pekerja")
     val id_pekerja : String,
@@ -60,6 +74,21 @@ data class Aktivitas(
     @SerialName("deskripsi_aktivitas")
     val deskripsi_aktivitas : String,
 )
+
+@Serializable
+data class AllAktivitasResponse(
+    val status: Boolean,
+    val message: String,
+    val data: List<Aktivitas>
+)
+
+@Serializable
+data class AktivitasDetailResponse(
+    val status: Boolean,
+    val message: String,
+    val data: Aktivitas
+)
+
 
 @Serializable
 data class Catatan(
