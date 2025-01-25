@@ -16,17 +16,17 @@ import com.example.tugasakhirpamm.ui.view.Pekerja.DestinasiDetailPekerja
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-sealed class DetailUiStateAkt {
-    data class Success(val aktivitas: Aktivitas) : DetailUiStateAkt()
-    object Error : DetailUiStateAkt()
-    object Loading : DetailUiStateAkt()
+sealed class DetailAktUiState {
+    data class Success(val aktivitas: Aktivitas) : DetailAktUiState()
+    object Error : DetailAktUiState()
+    object Loading : DetailAktUiState()
 }
 
 class DetailAktivitasViewModel(
     savedStateHandle: SavedStateHandle,
     private val aktivitas: AktivitasRepository
 ) : ViewModel() {
-    var aktivitasDetailState: DetailUiStateAkt by mutableStateOf(DetailUiStateAkt.Loading)
+    var aktivitasDetailState: DetailAktUiState by mutableStateOf(DetailAktUiState.Loading)
         private set
 
     private val _idAktivitas: String = checkNotNull(savedStateHandle[DestinasiDetailAktivitas.AKTIVITAS])
@@ -37,14 +37,14 @@ class DetailAktivitasViewModel(
 
     fun getAktivitasById() {
         viewModelScope.launch {
-            aktivitasDetailState = DetailUiStateAkt.Loading
+            aktivitasDetailState = DetailAktUiState.Loading
             aktivitasDetailState = try {
                 val fetchedAktivitas= aktivitas.getAktivitasById(_idAktivitas)
-                DetailUiStateAkt.Success(fetchedAktivitas)
+                DetailAktUiState.Success(fetchedAktivitas)
             } catch (e: IOException) {
-                DetailUiStateAkt.Error
+                DetailAktUiState.Error
             } catch (e: HttpException) {
-                DetailUiStateAkt.Error
+                DetailAktUiState.Error
             }
         }
     }

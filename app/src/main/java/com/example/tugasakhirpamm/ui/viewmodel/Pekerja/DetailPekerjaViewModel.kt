@@ -13,47 +13,52 @@ import com.example.tugasakhirpamm.ui.view.Pekerja.DestinasiDetailPekerja
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-sealed class DetailUiState {
-    data class Success(val pekerja: Pekerja) : DetailUiState()
-    object Error : DetailUiState()
-    object Loading : DetailUiState()
+sealed class DetailPkrUiState {
+    data class Success(val pekerja: Pekerja) : DetailPkrUiState()
+    object Error : DetailPkrUiState()
+    object Loading : DetailPkrUiState()
 }
 
 class DetailPekerjaViewModel(
     savedStateHandle: SavedStateHandle,
     private val pekerja: PekerjaRepository
 ) : ViewModel() {
-    var pekerjaDetailState: DetailUiState by mutableStateOf(DetailUiState.Loading)
+
+    var pekerjaDetailState: DetailPkrUiState by mutableStateOf(DetailPkrUiState.Loading)
         private set
 
-    private val _idPekerja: String = checkNotNull(savedStateHandle[DestinasiDetailPekerja.PEKERJA])
+    private val _idPekerja: String? = savedStateHandle[DestinasiDetailPekerja.PEKERJA]
 
-    init {
-        getPekerjaById()
-    }
+    val idPekerja: String
+        get() = idPekerja
 
-    fun getPekerjaById() {
+
+
+    // Ubah parameter ke dalam fungsi untuk menggunakan _idPekerja
+    fun getPekerjaById(idPekerja: String) {
         viewModelScope.launch {
-            pekerjaDetailState = DetailUiState.Loading
-            pekerjaDetailState = try {
-                val fetchedPekerja = pekerja.getPekerjaById(_idPekerja)
-                DetailUiState.Success(fetchedPekerja)
+            pekerjaDetailState = DetailPkrUiState.Loading
+            try {
+                val fetchedPekerja = pekerja.getPekerjaById(idPekerja)
+                pekerjaDetailState = DetailPkrUiState.Success(fetchedPekerja)
             } catch (e: IOException) {
-                DetailUiState.Error
+                pekerjaDetailState = DetailPkrUiState.Error
             } catch (e: HttpException) {
-                DetailUiState.Error
+                pekerjaDetailState = DetailPkrUiState.Error
             }
         }
     }
 
     fun deletePekerja() {
-        viewModelScope.launch {
-            try {
-                pekerja.deletePekerja(_idPekerja)
-            } catch (e: IOException) {
-                // Handle error
-            } catch (e: HttpException) {
-                // Handle error
+        _idPekerja?.let {
+            viewModelScope.launch {
+                try {
+                    pekerja.deletePekerja(it)
+                } catch (e: IOException) {
+                    // Handle error
+                } catch (e: HttpException) {
+                    // Handle error
+                }
             }
         }
     }

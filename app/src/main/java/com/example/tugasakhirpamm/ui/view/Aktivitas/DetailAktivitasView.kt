@@ -38,8 +38,8 @@ import com.example.tugasakhirpamm.model.Aktivitas
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailAktUiState
 import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailAktivitasViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailUiStateAkt
 
 object DestinasiDetailAktivitas : DestinasiNavigasi {
     override val route = "item_detail"
@@ -95,12 +95,12 @@ fun DetailViewAktivitas(
 @Composable
 fun BodyDetailAktivitas(
     retryAction: () -> Unit,
-    detailAktivitasUiState: DetailUiStateAkt,
+    detailAktivitasUiState: DetailAktUiState,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit
 ) {
     when (detailAktivitasUiState) {
-        is DetailUiStateAkt.Loading -> {
+        is DetailAktUiState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -108,7 +108,7 @@ fun BodyDetailAktivitas(
                 CircularProgressIndicator()
             }
         }
-        is DetailUiStateAkt.Error -> {
+        is DetailAktUiState.Error -> {
             Box(
                 modifier = modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -125,7 +125,7 @@ fun BodyDetailAktivitas(
                 }
             }
         }
-        is DetailUiStateAkt.Success -> {
+        is DetailAktUiState.Success -> {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

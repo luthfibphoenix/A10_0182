@@ -13,47 +13,56 @@ import com.example.tugasakhirpamm.ui.view.Tanaman.DestinasiDetailTanaman
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-sealed class DetailUiState {
-    data class Success(val tanaman: Tanaman) : DetailUiState()
-    object Error : DetailUiState()
-    object Loading : DetailUiState()
+sealed class DetailTnmUiState {
+    data class Success(val tanaman: Tanaman) : DetailTnmUiState()
+    object Error : DetailTnmUiState()
+    object Loading : DetailTnmUiState()
 }
 
 class DetailTanamanViewModel(
     savedStateHandle: SavedStateHandle,
     private val tanaman: TanamanRepository
-) :ViewModel(){
-    var tanamanDetailState: DetailUiState by mutableStateOf(DetailUiState.Loading)
+) : ViewModel() {
+
+    var tanamanDetailState: DetailTnmUiState by mutableStateOf(DetailTnmUiState.Loading)
         private set
 
     private val _idTanaman: String = checkNotNull(savedStateHandle[DestinasiDetailTanaman.TANAMAN])
 
-    init{
+    init {
         getTanamanById()
     }
 
-    fun getTanamanById(){
+    fun getTanamanById() {
         viewModelScope.launch {
-            tanamanDetailState = DetailUiState.Loading
+            tanamanDetailState = DetailTnmUiState.Loading
             tanamanDetailState = try {
                 val tanaman = tanaman.getTanamanById(_idTanaman)
-                DetailUiState.Success(tanaman)
-            } catch (e: IOException){
-                DetailUiState.Error
-            } catch (e: HttpException){
-                DetailUiState.Error
+                DetailTnmUiState.Success(tanaman)
+            } catch (e: IOException) {
+                DetailTnmUiState.Error
+            } catch (e: HttpException) {
+                DetailTnmUiState.Error
+            } catch (e: Exception) {
+                // Log or track unexpected errors
+                DetailTnmUiState.Error
             }
         }
     }
 
-    fun deleteTanaman(){
+    fun deleteTanaman() {
         viewModelScope.launch {
             try {
                 tanaman.deleteTanaman(_idTanaman)
-            }catch (e: IOException){
-                HomeUiState.Error
-            }catch (e : HttpException){
-                HomeUiState.Error
+            } catch (e: IOException) {
+                // Handle error specific to delete operation if needed
+                tanamanDetailState = DetailTnmUiState.Error
+            } catch (e: HttpException) {
+                // Handle error specific to delete operation if needed
+                tanamanDetailState = DetailTnmUiState.Error
+            } catch (e: Exception) {
+                // Log unexpected errors
+                tanamanDetailState = DetailTnmUiState.Error
             }
         }
     }

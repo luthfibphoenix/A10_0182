@@ -19,7 +19,7 @@ import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPekerjaViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPkrUiState
 
 object DestinasiDetailPekerja : DestinasiNavigasi {
     override val route = "item_detail"
@@ -63,7 +63,11 @@ fun DetailViewPekerja(
         BodyDetailPekerja(
             detailPekerjaUiState = viewModel.pekerjaDetailState,
             modifier = Modifier.padding(innerPadding),
-            retryAction = { viewModel.getPekerjaById() },
+            retryAction = {
+                viewModel.idPekerja?.let { idPekerja ->
+                    viewModel.getPekerjaById(idPekerja)
+                }
+            },
             onDeleteClick = {
                 viewModel.deletePekerja()
                 navigateBack()
@@ -75,12 +79,12 @@ fun DetailViewPekerja(
 @Composable
 fun BodyDetailPekerja(
     retryAction: () -> Unit,
-    detailPekerjaUiState: DetailUiState,
+    detailPekerjaUiState: DetailPkrUiState,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit
 ) {
     when (detailPekerjaUiState) {
-        is DetailUiState.Loading -> {
+        is DetailPkrUiState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -88,7 +92,7 @@ fun BodyDetailPekerja(
                 CircularProgressIndicator()
             }
         }
-        is DetailUiState.Error -> {
+        is DetailPkrUiState.Error -> {
             Box(
                 modifier = modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -105,7 +109,7 @@ fun BodyDetailPekerja(
                 }
             }
         }
-        is DetailUiState.Success -> {
+        is DetailPkrUiState.Success -> {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -20,7 +20,7 @@ import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.DetailTanamanViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.DetailUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.DetailTnmUiState
 
 object DestinasiDetailTanaman : DestinasiNavigasi {
     override val route = "item_detail"
@@ -76,12 +76,12 @@ fun DetailViewTanaman(
 @Composable
 fun BodyDetailTanaman(
     retryAction: () -> Unit,
-    detailUiState: DetailUiState,
+    detailUiState: DetailTnmUiState,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit
 ) {
     when (detailUiState) {
-        is DetailUiState.Loading -> {
+        is DetailTnmUiState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -90,7 +90,7 @@ fun BodyDetailTanaman(
             }
         }
 
-        is DetailUiState.Error -> {
+        is DetailTnmUiState.Error -> {
             Box(
                 modifier = modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -109,7 +109,7 @@ fun BodyDetailTanaman(
         }
 
 
-        is DetailUiState.Success -> {
+        is DetailTnmUiState.Success -> {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

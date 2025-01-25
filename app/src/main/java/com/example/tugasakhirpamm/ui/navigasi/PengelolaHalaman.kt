@@ -8,25 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.tugasakhirpamm.ui.view.Aktivitas.DestinasiAktivitasUpdate
-import com.example.tugasakhirpamm.ui.view.Aktivitas.DestinasiDetailAktivitas
-import com.example.tugasakhirpamm.ui.view.Aktivitas.DestinasiHomeAktivitas
-import com.example.tugasakhirpamm.ui.view.Aktivitas.DestinasiInsertAktivitas
-import com.example.tugasakhirpamm.ui.view.Aktivitas.DetailViewAktivitas
-import com.example.tugasakhirpamm.ui.view.Aktivitas.HomeViewAktivitas
-import com.example.tugasakhirpamm.ui.view.Aktivitas.InsertAktivitasScreen
-import com.example.tugasakhirpamm.ui.view.Aktivitas.UpdateAktivitasScreen
+import com.example.tugasakhirpamm.ui.view.Aktivitas.*
 import com.example.tugasakhirpamm.ui.view.HomeView
 import com.example.tugasakhirpamm.ui.view.MainMenu
 import com.example.tugasakhirpamm.ui.view.Pekerja.*
-import com.example.tugasakhirpamm.ui.view.Tanaman.DestinasiDetailTanaman
-import com.example.tugasakhirpamm.ui.view.Tanaman.DestinasiHomeTamaman
-import com.example.tugasakhirpamm.ui.view.Tanaman.DestinasiInsertTanaman
-import com.example.tugasakhirpamm.ui.view.Tanaman.DestinasiTanamanUpdate
-import com.example.tugasakhirpamm.ui.view.Tanaman.DetailViewTanaman
-import com.example.tugasakhirpamm.ui.view.Tanaman.HomeViewTanaman
-import com.example.tugasakhirpamm.ui.view.Tanaman.InsertTanamanScreen
-import com.example.tugasakhirpamm.ui.view.Tanaman.UpdateTanamanView
+import com.example.tugasakhirpamm.ui.view.Tanaman.*
+
 
 @Composable
 fun PengelolaHalaman(
@@ -160,7 +147,7 @@ fun PengelolaHalaman(
             } ?: navController.popBackStack()
         }
 
-        // Home Tanaman
+        // Home Aktivitas
         composable(DestinasiHomeAktivitas.route) {
             HomeViewAktivitas(
                 navigateToItemEntryAktivitas = { navController.navigate(DestinasiInsertAktivitas.route) },
@@ -175,14 +162,14 @@ fun PengelolaHalaman(
             )
         }
 
-        // Insert Tanaman
+        // Insert Aktivitas
         composable(DestinasiInsertAktivitas.route) {
             InsertAktivitasScreen(
                 navigateBack = { navController.popBackStack() }
             )
         }
 
-        // Detail Tanaman
+        // Detail Aktivitas
         composable(
             route = DestinasiDetailAktivitas.routeWithArg,
             arguments = listOf(
@@ -198,7 +185,7 @@ fun PengelolaHalaman(
             } ?: navController.popBackStack()
         }
 
-        // Update Tanaman
+        // Update Aktivitas
         composable(
             route = DestinasiAktivitasUpdate.routeWithArg,
             arguments = listOf(
