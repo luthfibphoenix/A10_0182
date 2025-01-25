@@ -59,5 +59,4 @@ class PertanianContainer : AppContainer {
     override val catatanRepository: CatatanRepository by lazy {
         NetworkCatatanRepository(catatanService)
     }
-
 }

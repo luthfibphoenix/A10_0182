@@ -29,7 +29,7 @@ class HomePekerjaViewModel(private val pekerja: PekerjaRepository): ViewModel(){
         viewModelScope.launch {
             pekerjaUiState = HomePekerjaUiState.Loading
             pekerjaUiState = try {
-                HomePekerjaUiState.Success(pekerja.getPekerja())
+                HomePekerjaUiState.Success(pekerja.getPekerja().data)
             } catch (e: IOException){
                 HomePekerjaUiState.Error
             } catch (e: HttpException){

@@ -30,6 +30,20 @@ data class Pekerja(
 )
 
 @Serializable
+data class AllPekerjaResponse(
+    val status: Boolean,
+    val message: String,
+    val data: List<Pekerja>
+)
+
+@Serializable
+data class PekerjaDetailResponse(
+    val status: Boolean,
+    val message: String,
+    val data: Pekerja
+)
+
+@Serializable
 data class Aktivitas(
     @SerialName("id_aktivitas")
     val id_aktivitas : String,

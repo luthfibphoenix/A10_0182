@@ -1,6 +1,5 @@
 package com.example.tugasakhirpamm.service
 
-import com.example.tugasakhirpamm.model.Aktivitas
 import com.example.tugasakhirpamm.model.Catatan
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -16,18 +15,18 @@ interface CatatanService {
         "Content-Type: application/json",
     )
 
-    @GET("/api/catatan_panen")
+    @GET("catatan_panen")
     suspend fun getCatatan(): List<Catatan>
 
-    @GET("/api/catatan_panen/{id}")
+    @GET("catatan_panen/{id}")
     suspend fun getCatatanById(idPanen: String): Catatan
 
-    @POST("/api/catatan_panen")
+    @POST("catatan_panen")
     suspend fun insertCatatan(catatan: Catatan)
 
-    @PUT("/api/catatan_panen/{id}")
+    @PUT("catatan_panen/{id}")
     suspend fun updateCatatan(@Query("id")idPanen: String, @Body catatan: Catatan)
 
-    @DELETE("/api/catatan_panen/{id}")
+    @DELETE("catatan_panen/{id}")
     suspend fun deleteCatatan(@Query("id")idPanen: String): retrofit2.Response<Void>
 }

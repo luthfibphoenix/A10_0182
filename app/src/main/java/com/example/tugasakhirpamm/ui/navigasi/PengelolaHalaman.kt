@@ -27,6 +27,8 @@ fun PengelolaHalaman(
                 onDetailClick = { idPekerja ->
                     if (idPekerja.isNotBlank()) {
                         navController.navigate("${DestinasiDetailPekerja.route}/$idPekerja")
+                    } else {
+                        // Tampilkan pesan kesalahan atau feedback
                     }
                 }
             )
@@ -47,7 +49,7 @@ fun PengelolaHalaman(
             )
         ) { backStackEntry ->
             val idPekerja = backStackEntry.arguments?.getString(DestinasiDetailPekerja.PEKERJA)
-            if (idPekerja != null && idPekerja.isNotBlank()) {
+            if (!idPekerja.isNullOrBlank()) {
                 DetailViewPekerja(
                     navigateBack = { navController.popBackStack() },
                     navigateToEdit = { navController.navigate("${DestinasiPekerjaUpdate.route}/$idPekerja") }
@@ -65,7 +67,7 @@ fun PengelolaHalaman(
             )
         ) { backStackEntry ->
             val idPekerja = backStackEntry.arguments?.getString(DestinasiPekerjaUpdate.PEKERJA)
-            if (idPekerja != null && idPekerja.isNotBlank()) {
+            if (!idPekerja.isNullOrBlank()) {
                 UpdatePekerjaScreen(
                     navigateBack = { navController.popBackStack() },
                     onNavigate = { navController.popBackStack() }
