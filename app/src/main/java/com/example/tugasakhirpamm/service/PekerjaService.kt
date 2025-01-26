@@ -3,6 +3,7 @@ package com.example.tugasakhirpamm.service
 import com.example.tugasakhirpamm.model.AllPekerjaResponse
 import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.model.PekerjaDetailResponse
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -20,15 +21,16 @@ interface PekerjaService {
     @GET("/api/pekerja")
     suspend fun getPekerja(): AllPekerjaResponse
 
-    @GET("/api/pekerja/{id}")
-    suspend fun getPekerjaById(@Path("id") idPekerja: String): PekerjaDetailResponse
+    @GET("/api/pekerja/{id_pekerja}")
+    suspend fun getPekerjaById(@Path("id_pekerja") idPekerja: String): PekerjaDetailResponse
 
     @POST("/api/pekerja/store")
-    suspend fun insertPekerja(@Body pekerja: Pekerja)
+    suspend fun insertPekerja(@Body pekerja: Pekerja): Response<Pekerja>
 
-    @PUT("/api/pekerja/{id}")
-    suspend fun updatePekerja(@Path("id") idPekerja: String, @Body pekerja: Pekerja)
+    @PUT("/api/pekerja/{id_pekerja}")
+    suspend fun updatePekerja(@Path("id_pekerja") idPekerja: String, @Body pekerja: Pekerja): Response<Pekerja>
 
-    @DELETE("/api/pekerja/{id}")
-    suspend fun deletePekerja(@Path("id") idPekerja: String): retrofit2.Response<Void>
+    @DELETE("/api/pekerja/{id_pekerja}")
+    suspend fun deletePekerja(@Path("id_pekerja") idPekerja: String): Response<Pekerja>
 }
+

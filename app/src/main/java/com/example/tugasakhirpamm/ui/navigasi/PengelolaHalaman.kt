@@ -1,5 +1,6 @@
 package com.example.tugasakhirpamm.ui.navigasi
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -9,11 +10,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tugasakhirpamm.ui.view.Aktivitas.*
+import com.example.tugasakhirpamm.ui.view.Catatan.*
 import com.example.tugasakhirpamm.ui.view.HomeView
 import com.example.tugasakhirpamm.ui.view.MainMenu
 import com.example.tugasakhirpamm.ui.view.Pekerja.*
 import com.example.tugasakhirpamm.ui.view.Tanaman.*
-
 
 @Composable
 fun PengelolaHalaman(
@@ -25,16 +26,20 @@ fun PengelolaHalaman(
         startDestination = MainMenu.route,
         modifier = modifier
     ) {
+        // Main Menu
         composable(MainMenu.route) {
             HomeView(
                 onTanamanButton = {
-                    navController.navigate(DestinasiHomeTamaman.route)
+                    navController.navigate(DestinasiHomeTanaman.route)
                 },
                 onPekerjaButton = {
                     navController.navigate(DestinasiHomePekerja.route)
                 },
                 onAktivitasButton = {
                     navController.navigate(DestinasiHomeAktivitas.route)
+                },
+                onCatatanButton = {
+                    navController.navigate(DestinasiHomeCatatan.route)
                 }
             )
         }
@@ -48,7 +53,7 @@ fun PengelolaHalaman(
                     if (idPekerja.isNotBlank()) {
                         navController.navigate("${DestinasiDetailPekerja.route}/$idPekerja")
                     } else {
-                        // Tampilkan pesan kesalahan atau feedback
+                        Log.e("Navigasi", "ID Pekerja tidak valid")
                     }
                 }
             )
@@ -74,7 +79,10 @@ fun PengelolaHalaman(
                     navigateBack = { navController.popBackStack() },
                     navigateToEdit = { navController.navigate("${DestinasiPekerjaUpdate.route}/$idPekerja") }
                 )
-            } ?: navController.popBackStack() // Kembali jika idPekerja null atau kosong
+            } ?: run {
+                Log.e("Navigasi", "ID Pekerja null")
+                navController.popBackStack()
+            }
         }
 
         // Update Pekerja
@@ -94,7 +102,7 @@ fun PengelolaHalaman(
         }
 
         // Home Tanaman
-        composable(DestinasiHomeTamaman.route) {
+        composable(DestinasiHomeTanaman.route) {
             HomeViewTanaman(
                 navigateToItemEntry = { navController.navigate(DestinasiInsertTanaman.route) },
                 onBackClick = { navController.popBackStack() },
@@ -102,7 +110,7 @@ fun PengelolaHalaman(
                     if (idTanaman.isNotBlank()) {
                         navController.navigate("${DestinasiDetailTanaman.route}/$idTanaman")
                     } else {
-                        // Tampilkan pesan kesalahan atau feedback
+                        Log.e("Navigasi", "ID Tanaman tidak valid")
                     }
                 }
             )
@@ -128,7 +136,10 @@ fun PengelolaHalaman(
                     navigateBack = { navController.popBackStack() },
                     navigateToEdit = { navController.navigate("${DestinasiTanamanUpdate.route}/$idTanaman") }
                 )
-            } ?: navController.popBackStack()
+            } ?: run {
+                Log.e("Navigasi", "ID Tanaman null")
+                navController.popBackStack()
+            }
         }
 
         // Update Tanaman
@@ -156,7 +167,7 @@ fun PengelolaHalaman(
                     if (idAktivitas.isNotBlank()) {
                         navController.navigate("${DestinasiDetailAktivitas.route}/$idAktivitas")
                     } else {
-                        // Tampilkan pesan kesalahan atau feedback
+                        Log.e("Navigasi", "ID Aktivitas tidak valid")
                     }
                 }
             )
@@ -182,7 +193,10 @@ fun PengelolaHalaman(
                     navigateBack = { navController.popBackStack() },
                     navigateToEdit = { navController.navigate("${DestinasiAktivitasUpdate.route}/$idAktivitas") }
                 )
-            } ?: navController.popBackStack()
+            } ?: run {
+                Log.e("Navigasi", "ID Aktivitas null")
+                navController.popBackStack()
+            }
         }
 
         // Update Aktivitas
@@ -195,6 +209,63 @@ fun PengelolaHalaman(
             val idAktivitas = backStackEntry.arguments?.getString(DestinasiAktivitasUpdate.AKTIVITAS)
             idAktivitas?.let {
                 UpdateAktivitasScreen(
+                    navigateBack = { navController.popBackStack() },
+                    onNavigate = { navController.popBackStack() }
+                )
+            } ?: navController.popBackStack()
+        }
+
+        // Home Catatan
+        composable(DestinasiHomeCatatan.route) {
+            HomeViewCatatan(
+                navigateToItemEntryCatatan = { navController.navigate(DestinasiInsertCatatan.route) },
+                onBackClick = { navController.popBackStack() },
+                onDetailCatatanClick = { idCatatan ->
+                    if (idCatatan.isNotBlank()) {
+                        navController.navigate("${DestinasiDetailCatatan.route}/$idCatatan")
+                    } else {
+                        Log.e("Navigasi", "ID Catatan tidak valid")
+                    }
+                }
+            )
+        }
+
+        // Insert Catatan
+        composable(DestinasiInsertCatatan.route) {
+            InsertCatatanScreen(
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+
+        // Detail Catatan
+        composable(
+            route = DestinasiDetailCatatan.routeWithArg,
+            arguments = listOf(
+                navArgument(DestinasiDetailCatatan.CATATAN) { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val idCatatan = backStackEntry.arguments?.getString(DestinasiDetailCatatan.CATATAN)
+            idCatatan?.let {
+                DetailViewCatatan(
+                    navigateBack = { navController.popBackStack() },
+                    navigateToEdit = { navController.navigate("${DestinasiCatatanUpdate.route}/$idCatatan") }
+                )
+            } ?: run {
+                Log.e("Navigasi", "ID Catatan null")
+                navController.popBackStack()
+            }
+        }
+
+        // Update Catatan
+        composable(
+            route = DestinasiCatatanUpdate.routeWithArg,
+            arguments = listOf(
+                navArgument(DestinasiCatatanUpdate.CATATAN) { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val idCatatan = backStackEntry.arguments?.getString(DestinasiCatatanUpdate.CATATAN)
+            idCatatan?.let {
+                UpdateCatatanScreen(
                     navigateBack = { navController.popBackStack() },
                     onNavigate = { navController.popBackStack() }
                 )

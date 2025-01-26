@@ -38,6 +38,7 @@ fun HomeView(
     onTanamanButton: () -> Unit,
     onPekerjaButton: () -> Unit,
     onAktivitasButton: () -> Unit,
+    onCatatanButton: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -107,6 +108,19 @@ fun HomeView(
             ) {
                 Text(
                     text = "Aktivitas",
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
+            }
+            Button(
+                onClick = { onCatatanButton() },
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .padding(8.dp),
+                colors = ButtonDefaults.buttonColors(Color.Green)
+            ) {
+                Text(
+                    text = "Catatan",
                     fontSize = 18.sp,
                     color = Color.White
                 )

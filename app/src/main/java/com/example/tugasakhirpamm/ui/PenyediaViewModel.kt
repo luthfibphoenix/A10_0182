@@ -12,6 +12,10 @@ import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailAktivitasViewMode
 import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.HomeAktivitasViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.InsertAktivitasViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.UpdateAktivitasViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.DetailCatatanViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.HomeCatatanViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.InsertCatatanViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.UpdateCatatanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPekerjaViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.HomePekerjaViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertPekerjaViewModel
@@ -21,23 +25,76 @@ import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeTanamanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertTanamanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.UpdateTanamanViewModel
 
-
-object PenyediaViewModel{
+object PenyediaViewModel {
     val Factory = viewModelFactory {
-        initializer { HomeTanamanViewModel(AplikasiPertanian().container.tanamanRepository) }
-        initializer { DetailTanamanViewModel(createSavedStateHandle(), AplikasiPertanian().container.tanamanRepository) }
-        initializer { InsertTanamanViewModel(AplikasiPertanian().container.tanamanRepository) }
-        initializer { UpdateTanamanViewModel(createSavedStateHandle(), AplikasiPertanian().container.tanamanRepository) }
-        initializer { HomePekerjaViewModel(AplikasiPertanian().container.pekerjaRepository) }
-        initializer { InsertPekerjaViewModel(AplikasiPertanian().container.pekerjaRepository) }
-        initializer { DetailPekerjaViewModel(createSavedStateHandle(), AplikasiPertanian().container.pekerjaRepository) }
-        initializer { UpdatePekerjaViewModel(createSavedStateHandle(), AplikasiPertanian().container.pekerjaRepository) }
-        initializer { HomeAktivitasViewModel(AplikasiPertanian().container.aktivitasRepository) }
-        initializer { InsertAktivitasViewModel(AplikasiPertanian().container.aktivitasRepository) }
-        initializer { DetailAktivitasViewModel(createSavedStateHandle(), AplikasiPertanian().container.aktivitasRepository) }
-        initializer { UpdateAktivitasViewModel(createSavedStateHandle(), AplikasiPertanian().container.aktivitasRepository) }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            HomeTanamanViewModel(aplikasiPertanian.container.tanamanRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            DetailTanamanViewModel(createSavedStateHandle(), aplikasiPertanian.container.tanamanRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            InsertTanamanViewModel(aplikasiPertanian.container.tanamanRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            UpdateTanamanViewModel(createSavedStateHandle(), aplikasiPertanian.container.tanamanRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            HomePekerjaViewModel(aplikasiPertanian.container.pekerjaRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            InsertPekerjaViewModel(aplikasiPertanian.container.pekerjaRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            DetailPekerjaViewModel(createSavedStateHandle(), aplikasiPertanian.container.pekerjaRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            UpdatePekerjaViewModel(createSavedStateHandle(), aplikasiPertanian.container.pekerjaRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            HomeAktivitasViewModel(aplikasiPertanian.container.aktivitasRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            InsertAktivitasViewModel(aplikasiPertanian.container.aktivitasRepository, aplikasiPertanian.container.tanamanRepository, aplikasiPertanian.container.pekerjaRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            DetailAktivitasViewModel(createSavedStateHandle(), aplikasiPertanian.container.aktivitasRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            UpdateAktivitasViewModel(createSavedStateHandle(), aplikasiPertanian.container.aktivitasRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            HomeCatatanViewModel(aplikasiPertanian.container.catatanRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            InsertCatatanViewModel(aplikasiPertanian.container.catatanRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            DetailCatatanViewModel(createSavedStateHandle(), aplikasiPertanian.container.catatanRepository)
+        }
+        initializer {
+            val aplikasiPertanian = AplikasiPertanian() // Get application instance
+            UpdateCatatanViewModel(createSavedStateHandle(), aplikasiPertanian.container.catatanRepository)
+        }
     }
 }
+
+
 
 fun CreationExtras.AplikasiPertanian(): PertanianApplications =
     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as PertanianApplications)

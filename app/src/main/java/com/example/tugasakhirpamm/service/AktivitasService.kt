@@ -4,6 +4,7 @@ import com.example.tugasakhirpamm.model.Aktivitas
 import com.example.tugasakhirpamm.model.AktivitasDetailResponse
 import com.example.tugasakhirpamm.model.AllAktivitasResponse
 import com.example.tugasakhirpamm.model.PekerjaDetailResponse
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -13,24 +14,24 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface AktivitasService{
+interface AktivitasService {
     @Headers(
         "Accept: application/json",
-        "Content-Type: application/json",
+        "Content-Type: application/json"
     )
-
-    @GET("/api/aktivitas_pertanian")
+    @GET("/api/aktivitas")
     suspend fun getAktivitas(): AllAktivitasResponse
 
-    @GET("/api/aktivitas_pertanian/{id}")
-    suspend fun getAktivitasById(@Path("id") idAktivitas: String): AktivitasDetailResponse
+    @GET("/api/aktivitas/{id_aktivitas}")
+    suspend fun getAktivitasById(@Path("id_aktivitas") idAktivitas: String): AktivitasDetailResponse
 
-    @POST("/api/aktivitas_pertanian/store")
-    suspend fun insertAktivitas(aktivitas: Aktivitas)
+    @POST("/api/aktivitas/store")
+    suspend fun insertAktivitas(@Body aktivitas: Aktivitas): Response<Aktivitas>
 
-    @PUT("/api/aktivitas_pertanian/{id}")
-    suspend fun updateAktivitas(@Query("id")idAktivitas: String,@Body aktivitas: Aktivitas)
+    @PUT("/api/aktivitas/{id_aktivitas}")
+    suspend fun updateAktivitas(@Path("id_aktivitas") idAktivitas: String, @Body aktivitas: Aktivitas): Response<Aktivitas>
 
-    @DELETE("/api/aktivitas_pertanian/{id}")
-    suspend fun deleteAktivitas(@Query("id")idAktivitas: String): retrofit2.Response<Void>
+    @DELETE("/api/aktivitas/{id_aktivitas}")
+    suspend fun deleteAktivitas(@Path("id_aktivitas") idAktivitas: String): Response<Aktivitas>
 }
+

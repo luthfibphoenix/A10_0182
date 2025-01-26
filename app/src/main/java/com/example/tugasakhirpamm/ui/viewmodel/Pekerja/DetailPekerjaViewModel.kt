@@ -14,14 +14,14 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed class DetailPkrUiState {
-    data class Success(val pekerja: Pekerja) : DetailPkrUiState()
-    object Error : DetailPkrUiState()
+    data class Success(val pekerja: Pekerja? = null) : DetailPkrUiState()  // Optional pekerja
+    data class Error(val message: String? = null) : DetailPkrUiState()
     object Loading : DetailPkrUiState()
 }
 
 class DetailPekerjaViewModel(
     savedStateHandle: SavedStateHandle,
-    private val pekerja: PekerjaRepository
+    private val pekerjaRepository: PekerjaRepository
 ) : ViewModel() {
 
     var pekerjaDetailState: DetailPkrUiState by mutableStateOf(DetailPkrUiState.Loading)
@@ -29,37 +29,44 @@ class DetailPekerjaViewModel(
 
     private val _idPekerja: String? = savedStateHandle[DestinasiDetailPekerja.PEKERJA]
 
+    // Property for idPekerja with null safety
     val idPekerja: String
-        get() = idPekerja
-
-
+        get() = _idPekerja ?: throw IllegalStateException("ID Pekerja tidak ditemukan")
 
     // Ubah parameter ke dalam fungsi untuk menggunakan _idPekerja
-    fun getPekerjaById(idPekerja: String) {
-        viewModelScope.launch {
-            pekerjaDetailState = DetailPkrUiState.Loading
-            try {
-                val fetchedPekerja = pekerja.getPekerjaById(idPekerja)
-                pekerjaDetailState = DetailPkrUiState.Success(fetchedPekerja)
-            } catch (e: IOException) {
-                pekerjaDetailState = DetailPkrUiState.Error
-            } catch (e: HttpException) {
-                pekerjaDetailState = DetailPkrUiState.Error
+    fun getPekerjaById() {
+        _idPekerja?.let { id ->
+            viewModelScope.launch {
+                pekerjaDetailState = DetailPkrUiState.Loading
+                try {
+                    val fetchedPekerja = pekerjaRepository.getPekerjaById(id)
+                    pekerjaDetailState = DetailPkrUiState.Success(fetchedPekerja)
+                } catch (e: IOException) {
+                    pekerjaDetailState = DetailPkrUiState.Error("Tidak ada koneksi internet")
+                } catch (e: HttpException) {
+                    pekerjaDetailState = DetailPkrUiState.Error("Gagal memuat data pekerja")
+                }
             }
+        } ?: run {
+            pekerjaDetailState = DetailPkrUiState.Error("ID Pekerja tidak ditemukan")
         }
     }
 
+    // Function to delete Pekerja
     fun deletePekerja() {
         _idPekerja?.let {
             viewModelScope.launch {
                 try {
-                    pekerja.deletePekerja(it)
+                    pekerjaRepository.deletePekerja(it)
+                    pekerjaDetailState = DetailPkrUiState.Success()  // Optionally reset state after deletion
                 } catch (e: IOException) {
-                    // Handle error
+                    pekerjaDetailState = DetailPkrUiState.Error("Tidak ada koneksi internet")
                 } catch (e: HttpException) {
-                    // Handle error
+                    pekerjaDetailState = DetailPkrUiState.Error("Gagal menghapus pekerja")
                 }
             }
+        } ?: run {
+            pekerjaDetailState = DetailPkrUiState.Error("ID Pekerja tidak ditemukan")
         }
     }
 }

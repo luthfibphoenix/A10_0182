@@ -1,10 +1,11 @@
 package com.example.tugasakhirpamm.repository
 
+import com.example.tugasakhirpamm.model.AllCatatanResponse
 import com.example.tugasakhirpamm.model.Catatan
 import com.example.tugasakhirpamm.service.CatatanService
 
 interface CatatanRepository {
-    suspend fun getCatatan(): List<Catatan>
+    suspend fun getCatatan(): AllCatatanResponse
     suspend fun insertCatatan(catatan: Catatan)
     suspend fun updateCatatan(idPanen: String, catatan: Catatan)
     suspend fun deleteCatatan(idPanen: String)
@@ -15,12 +16,13 @@ class NetworkCatatanRepository(
     private val catatanApiService: CatatanService
 ) : CatatanRepository {
 
-    override suspend fun getCatatan(): List<Catatan> {
+    override suspend fun getCatatan(): AllCatatanResponse {
+        println(catatanApiService.getCatatan())
         return catatanApiService.getCatatan()
     }
 
     override suspend fun getCatatanById(idPanen: String): Catatan {
-        return catatanApiService.getCatatanById(idPanen)
+        return catatanApiService.getCatatanById(idPanen).data
     }
 
     override suspend fun insertCatatan(catatan: Catatan) {

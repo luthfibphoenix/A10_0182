@@ -107,3 +107,17 @@ data class Catatan(
     val keterangan : String,
 )
 
+@Serializable
+data class AllCatatanResponse(
+    val status: Boolean,
+    val message: String,
+    val data: List<Catatan>
+)
+
+@Serializable
+data class CatatanDetailResponse(
+    val status: Boolean,
+    val message: String,
+    val data: Catatan
+)
+

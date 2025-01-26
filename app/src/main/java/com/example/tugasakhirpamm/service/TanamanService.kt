@@ -14,15 +14,16 @@ interface TanamanService {
     @GET("/api/tanaman")
     suspend fun getTanaman(): AllTanamanResponse
 
-    @GET("/api/tanaman/{id}")
-    suspend fun getTanamanById(@Path("id") idTanaman: String): TanamanDetailResponse
+    @GET("/api/tanaman/{id_tanaman}")
+    suspend fun getTanamanById(@Path("id_tanaman") idTanaman: String): TanamanDetailResponse
 
     @POST("/api/tanaman/store")
     suspend fun insertTanaman(@Body tanaman: Tanaman)
 
-    @PUT("/api/tanaman/{id}")
-    suspend fun updateTanaman(@Path("id") idTanaman: String, @Body tanaman: Tanaman)
+    @PUT("/api/tanaman/{id_tanaman}")
+    suspend fun updateTanaman(@Path("id_tanaman") idTanaman: String, @Body tanaman: Tanaman)
 
-    @DELETE("/api/tanaman/{id}")
-    suspend fun deleteTanaman(@Path("id") idTanaman: String): retrofit2.Response<Void>
+    @DELETE("/api/tanaman/{id_tanaman}")
+    suspend fun deleteTanaman(@Path("id_tanaman") idTanaman: String): retrofit2.Response<Void>
 }
+

@@ -13,12 +13,14 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tugasakhirpamm.model.Pekerja
+import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
@@ -52,11 +56,29 @@ fun InsertAktivitasScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    // Fetch Tanaman dan Pekerja berdasarkan ID
+    val selectedTanamanId = "some-tanaman-id" // Ganti dengan ID Tanaman yang diinginkan
+    val selectedPekerjaId = "some-pekerja-id"  // Ganti dengan ID Pekerja yang diinginkan
+
+    // Call fetchTanamanAndPekerja saat screen pertama kali dibuka
+    LaunchedEffect(true) {
+        viewModel.fetchTanamanAndPekerja(
+            idTanaman = selectedTanamanId,
+            idPekerja = selectedPekerjaId,
+            onSuccess = { tanaman, pekerja ->
+                // On success, viewModel's UI state will be updated
+            },
+            onError = { error ->
+                // Handle error
+            }
+        )
+    }
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiInsertPekerja.titleRes,
+                title = DestinasiInsertAktivitas.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack
@@ -83,9 +105,10 @@ fun InsertAktivitasScreen(
 }
 
 
+
 @Composable
 fun EntryBody(
-    insertUiState: InsertUiStateAkt, // From Pekerja ViewModel
+    insertUiState: InsertUiStateAkt,
     onAktivitasValueChange: (InsertUiEventAktivitas) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -97,6 +120,8 @@ fun EntryBody(
         FormInput(
             insertUiEvent = insertUiState.insertUiEventAkt, // Correct reference
             onValueChange = onAktivitasValueChange,
+            tanamanList = insertUiState.availableTanaman,  // Tanaman list from ViewModel
+            pekerjaList = insertUiState.availablePekerja,  // Pekerja list from ViewModel
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -110,6 +135,7 @@ fun EntryBody(
 }
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FormInput(
@@ -117,8 +143,8 @@ fun FormInput(
     modifier: Modifier = Modifier,
     onValueChange: (InsertUiEventAktivitas) -> Unit = {},
     enabled: Boolean = true,
-    tanamanList: List<String> = emptyList(), // List of id_tanaman
-    pekerjaList: List<String> = emptyList() // List of id_pekerja
+    tanamanList: List<Tanaman> = emptyList(), // List of Tanaman from ViewModel
+    pekerjaList: List<Pekerja> = emptyList()  // List of Pekerja from ViewModel
 ) {
     var expandedTanaman by remember { mutableStateOf(false) }
     var expandedPekerja by remember { mutableStateOf(false) }
@@ -129,6 +155,7 @@ fun FormInput(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        // ID Aktivitas TextField
         OutlinedTextField(
             value = insertUiEvent.id_aktivitas,
             onValueChange = { onValueChange(insertUiEvent.copy(id_aktivitas = it)) },
@@ -139,81 +166,25 @@ fun FormInput(
         )
 
         // ID Tanaman Dropdown
-        ExposedDropdownMenuBox(
-            expanded = expandedTanaman,
-            onExpandedChange = { expandedTanaman = !expandedTanaman }
-        ) {
-            OutlinedTextField(
-                value = selectedTanaman,
-                onValueChange = { selectedTanaman = it },
-                label = { Text("ID Tanaman") },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = enabled,
-                singleLine = true,
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = "Dropdown"
-                    )
-                },
-                readOnly = true
-            )
+        OutlinedTextField(
+            value = insertUiEvent.id_tanaman,
+            onValueChange = { onValueChange(insertUiEvent.copy(id_tanaman = it)) },
+            label = { Text("ID Tanaman") },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
 
-            ExposedDropdownMenu(
-                expanded = expandedTanaman,
-                onDismissRequest = { expandedTanaman = false }
-            ) {
-                tanamanList.forEach { tanaman ->
-                    DropdownMenuItem(
-                        text = { Text(tanaman) },
-                        onClick = {
-                            selectedTanaman = tanaman
-                            onValueChange(insertUiEvent.copy(id_tanaman = tanaman))
-                            expandedTanaman = false
-                        }
-                    )
-                }
-            }
-        }
+        OutlinedTextField(
+            value = insertUiEvent.id_pekerja,
+            onValueChange = { onValueChange(insertUiEvent.copy(id_pekerja = it)) },
+            label = { Text("ID Pekerja") },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
 
-        // ID Pekerja Dropdown
-        ExposedDropdownMenuBox(
-            expanded = expandedPekerja,
-            onExpandedChange = { expandedPekerja = !expandedPekerja }
-        ) {
-            OutlinedTextField(
-                value = selectedPekerja,
-                onValueChange = { selectedPekerja = it },
-                label = { Text("ID Pekerja") },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = enabled,
-                singleLine = true,
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = "Dropdown"
-                    )
-                },
-                readOnly = true
-            )
-
-            ExposedDropdownMenu(
-                expanded = expandedPekerja,
-                onDismissRequest = { expandedPekerja = false }
-            ) {
-                pekerjaList.forEach { pekerja ->
-                    DropdownMenuItem(
-                        text = { Text(pekerja) },
-                        onClick = {
-                            selectedPekerja = pekerja
-                            onValueChange(insertUiEvent.copy(id_pekerja = pekerja))
-                            expandedPekerja = false
-                        }
-                    )
-                }
-            }
-        }
-
+        // Tanggal Aktivitas TextField
         OutlinedTextField(
             value = insertUiEvent.tanggal_aktivitas,
             onValueChange = { onValueChange(insertUiEvent.copy(tanggal_aktivitas = it)) },
@@ -223,6 +194,7 @@ fun FormInput(
             singleLine = true
         )
 
+        // Deskripsi Aktivitas TextField
         OutlinedTextField(
             value = insertUiEvent.deskripsi_aktivitas,
             onValueChange = { onValueChange(insertUiEvent.copy(deskripsi_aktivitas = it)) },
@@ -232,6 +204,7 @@ fun FormInput(
             singleLine = true
         )
 
+        // Informasi untuk Pengisian Data
         if (enabled) {
             Text(
                 text = "Isi Semua Data!",
@@ -245,5 +218,3 @@ fun FormInput(
         )
     }
 }
-
-

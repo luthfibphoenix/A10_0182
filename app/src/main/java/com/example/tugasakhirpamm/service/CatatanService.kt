@@ -1,12 +1,16 @@
 package com.example.tugasakhirpamm.service
 
+import com.example.tugasakhirpamm.model.AllCatatanResponse
 import com.example.tugasakhirpamm.model.Catatan
+import com.example.tugasakhirpamm.model.CatatanDetailResponse
+import com.example.tugasakhirpamm.model.PekerjaDetailResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CatatanService {
@@ -15,18 +19,18 @@ interface CatatanService {
         "Content-Type: application/json",
     )
 
-    @GET("catatan_panen")
-    suspend fun getCatatan(): List<Catatan>
+    @GET("/api/catatan")
+    suspend fun getCatatan(): AllCatatanResponse
 
-    @GET("catatan_panen/{id}")
-    suspend fun getCatatanById(idPanen: String): Catatan
+    @GET("/api/catatan/{id_panen}")
+    suspend fun getCatatanById(@Path("id_panen") idPanen: String): CatatanDetailResponse
 
-    @POST("catatan_panen")
-    suspend fun insertCatatan(catatan: Catatan)
+    @POST("/api/catatan")
+    suspend fun insertCatatan(@Body catatan: Catatan)
 
-    @PUT("catatan_panen/{id}")
-    suspend fun updateCatatan(@Query("id")idPanen: String, @Body catatan: Catatan)
+    @PUT("/api/catatan/{id_panen}")
+    suspend fun updateCatatan(@Path("id_panen") idPanen: String, @Body catatan: Catatan)
 
-    @DELETE("catatan_panen/{id}")
-    suspend fun deleteCatatan(@Query("id")idPanen: String): retrofit2.Response<Void>
+    @DELETE("/api/catatan/{id_panen}")
+    suspend fun deleteCatatan(@Path("id_panen") idPanen: String): retrofit2.Response<Void>
 }

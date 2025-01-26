@@ -1,12 +1,8 @@
-package com.example.tugasakhirpamm.ui.view.Tanaman
+package com.example.tugasakhirpamm.ui.view.Catatan
 
-import com.example.tugasakhirpamm.R
-import com.example.tugasakhirpamm.model.Tanaman
-import com.example.tugasakhirpamm.ui.PenyediaViewModel
-import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
-import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeTanamanViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeUiState
+import com.example.tugasakhirpamm.model.Aktivitas
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.HomeAktivitasUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.HomeAktivitasViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,88 +39,99 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tugasakhirpamm.R
+import com.example.tugasakhirpamm.model.Catatan
+import com.example.tugasakhirpamm.ui.PenyediaViewModel
+import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.HomeCatatanUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.HomeCatatanViewModel
 
-object DestinasiHomeTanaman: DestinasiNavigasi {
-    override val route ="home_tanaman"
-    override val titleRes = "Home Tanaman"
+object DestinasiHomeCatatan : DestinasiNavigasi {
+    override val route = "home_catatan"
+    override val titleRes = "Home Catatan"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeViewTanaman(
-    navigateToItemEntry:()->Unit,
+fun HomeViewCatatan(
+    navigateToItemEntryCatatan: () -> Unit,
+    modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    modifier: Modifier =Modifier,
-    onDetailTanamanClick: (String) -> Unit ={},
-    viewModel: HomeTanamanViewModel = viewModel(factory = PenyediaViewModel.Factory)
-){
+    onDetailCatatanClick: (String) -> Unit = {},
+    viewModel: HomeCatatanViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiHomeTanaman.titleRes,
+                title = "Home Catatan",
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 onRefresh = {
-                    viewModel.getTanaman()
+                    viewModel.getCatatan()
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = navigateToItemEntry,
+                onClick = navigateToItemEntryCatatan,
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(18.dp)
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Tanaman")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Catatan")
             }
         },
-    ) { innerPadding->
-        HomeStatus(
-            homeUiState = viewModel.tanamanUiState,
-            retryAction = {viewModel.getTanaman()}, modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailTanamanClick,onDeleteClick = {
-                viewModel.deleteTanaman(it.id_tanaman)
-                viewModel.getTanaman()
+    ) { innerPadding ->
+        HomeCatatanStatus(
+            homeCatatanUiState = viewModel.catatanUiState,
+            retryAction = { viewModel.getCatatan() },
+            modifier = Modifier.padding(innerPadding),
+            onDetailClick = onDetailCatatanClick,
+            onDeleteClick = { catatan ->
+                viewModel.deleteCatatan(catatan.id_panen)
+                viewModel.getCatatan()
             }
         )
     }
 }
 
 @Composable
-fun HomeStatus(
-    homeUiState: HomeUiState,
+fun HomeCatatanStatus(
+    homeCatatanUiState: HomeCatatanUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
-    onDeleteClick: (Tanaman) -> Unit = {},
+    onDeleteClick: (Catatan) -> Unit = {},
     onDetailClick: (String) -> Unit
-){
-    when (homeUiState){
-        is HomeUiState.Loading-> OnLoading(modifier = modifier.fillMaxSize())
-
-        is HomeUiState.Success ->
-            if(homeUiState.Tanaman.isEmpty()){
-                return Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-                    Text(text = "Tidak ada data Tanaman")
+) {
+    when (homeCatatanUiState) {
+        is HomeCatatanUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+        is HomeCatatanUiState.Success ->
+            if (homeCatatanUiState.Catatan.isEmpty()) {
+                Box(
+                    modifier = modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "Tidak ada data Catatan")
                 }
-            }else{
-                TanamanLayout(
-                    tanaman = homeUiState.Tanaman,modifier = modifier.fillMaxWidth(),
-                    onDetailClick = {
-                        onDetailClick(it.id_tanaman)
-                    },
-                    onDeleteClick={
-                        onDeleteClick(it)
-                    }
+            } else {
+                CatatanLayout(
+                    catatan = homeCatatanUiState.Catatan,
+                    modifier = modifier.fillMaxWidth(),
+                    onDetailClick = onDetailClick,
+                    onDeleteClick = onDeleteClick
                 )
             }
-        is HomeUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+        is HomeCatatanUiState.Error -> OnError(
+            retryAction,
+            modifier = modifier.fillMaxSize()
+        )
     }
 }
 
 @Composable
-fun OnLoading(modifier: Modifier = Modifier){
+fun OnLoading(modifier: Modifier = Modifier) {
     Image(
         modifier = modifier.size(200.dp),
         painter = painterResource(R.drawable.loading2),
@@ -133,9 +140,9 @@ fun OnLoading(modifier: Modifier = Modifier){
 }
 
 @Composable
-fun OnError(retryAction:()->Unit, modifier: Modifier = Modifier){
+fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
     Column(
-        modifier=modifier,
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -151,38 +158,35 @@ fun OnError(retryAction:()->Unit, modifier: Modifier = Modifier){
 }
 
 @Composable
-fun TanamanLayout(
-    tanaman: List<Tanaman>,
+fun CatatanLayout(
+    catatan: List<Catatan>,
     modifier: Modifier = Modifier,
-    onDetailClick:(Tanaman)->Unit,
-    onDeleteClick: (Tanaman) -> Unit = {}
-){
+    onDetailClick: (String) -> Unit,
+    onDeleteClick: (Catatan) -> Unit = {}
+) {
     LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(tanaman){ tanaman ->
-            TanamanCard(
-                tanaman = tanaman,
+        items(catatan) { catatanItem ->
+            CatatansCard(
+                catatan = catatanItem,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable{onDetailClick(tanaman)},
-                onDeleteClick ={
-                    onDeleteClick(tanaman)
-                }
+                    .clickable { onDetailClick(catatanItem.id_panen) },
+                onDeleteClick = { onDeleteClick(catatanItem) }
             )
-
         }
     }
 }
 
 @Composable
-fun TanamanCard(
-    tanaman: Tanaman,
+fun CatatansCard(
+    catatan: Catatan,
     modifier: Modifier = Modifier,
-    onDeleteClick:(Tanaman)->Unit={}
-){
+    onDeleteClick: (Catatan) -> Unit = {}
+) {
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
@@ -197,31 +201,27 @@ fun TanamanCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = tanaman.nama_tanaman,
+                    text = catatan.id_panen,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(Modifier.weight(1f))
-                IconButton(onClick = {onDeleteClick(tanaman)}) {
+                Text(
+                    text = catatan.tanggal_panen,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(Modifier.weight(1f))
+                Text(
+                    text = catatan.jumlah_panen,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(Modifier.weight(1f))
+                IconButton(onClick = { onDeleteClick(catatan) }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
                     )
                 }
-
-                Text(
-                    text = tanaman.id_tanaman,
-                    style = MaterialTheme.typography.titleMedium
-                )
             }
-
-            Text(
-                text = tanaman.deskripsi_tanaman,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = tanaman.periode_tanaman,
-                style = MaterialTheme.typography.titleMedium
-            )
         }
     }
 }

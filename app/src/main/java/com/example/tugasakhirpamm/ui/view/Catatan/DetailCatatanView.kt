@@ -1,5 +1,8 @@
-package com.example.tugasakhirpamm.ui.view.Pekerja
+package com.example.tugasakhirpamm.ui.view.Catatan
 
+import com.example.tugasakhirpamm.model.Catatan
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.DetailCatUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.DetailCatatanViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -14,34 +17,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPekerjaViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPkrUiState
 
-object DestinasiDetailPekerja : DestinasiNavigasi {
+object DestinasiDetailCatatan : DestinasiNavigasi {
     override val route = "item_detail"
-    override val titleRes = "Detail Pekerja"
-    const val PEKERJA = "idPekerja"
-    val routeWithArg = "$route/{$PEKERJA}"
+    override val titleRes = "Detail Catatan"
+    const val CATATAN = "idCatatan"
+    val routeWithArg = "$route/{$CATATAN}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailViewPekerja(
+fun DetailViewCatatan(
     navigateBack: () -> Unit,
     navigateToEdit: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: DetailPekerjaViewModel = viewModel(factory = PenyediaViewModel.Factory)
+    viewModel: DetailCatatanViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = "Detail Pekerja",
+                title = "Detail Catatan",
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack
@@ -55,19 +55,19 @@ fun DetailViewPekerja(
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit Pekerja"
+                    contentDescription = "Edit Catatan"
                 )
             }
         }
     ) { innerPadding ->
-        BodyDetailPekerja(
-            detailPekerjaUiState = viewModel.pekerjaDetailState,
+        BodyDetailCatatan(
+            detailCatatanUiState = viewModel.catatanDetailState,
             modifier = Modifier.padding(innerPadding),
             retryAction = {
-                viewModel.getPekerjaById() // Fix the call here
+                viewModel.getCatatanById() // Fix the call here
             },
             onDeleteClick = {
-                viewModel.deletePekerja()
+                viewModel.deleteCatatan()
                 navigateBack()
             }
         )
@@ -76,14 +76,14 @@ fun DetailViewPekerja(
 
 
 @Composable
-fun BodyDetailPekerja(
+fun BodyDetailCatatan(
     retryAction: () -> Unit,
-    detailPekerjaUiState: DetailPkrUiState,
+    detailCatatanUiState: DetailCatUiState,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit
 ) {
-    when (detailPekerjaUiState) {
-        is DetailPkrUiState.Loading -> {
+    when (detailCatatanUiState) {
+        is DetailCatUiState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -91,7 +91,7 @@ fun BodyDetailPekerja(
                 CircularProgressIndicator()
             }
         }
-        is DetailPkrUiState.Error -> {
+        is DetailCatUiState.Error -> {
             Box(
                 modifier = modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -108,16 +108,16 @@ fun BodyDetailPekerja(
                 }
             }
         }
-        is DetailPkrUiState.Success -> {
+        is DetailCatUiState.Success -> {
             // Check if pekerja is null and handle accordingly
-            detailPekerjaUiState.pekerja?.let { pekerja ->
+            detailCatatanUiState.catatan?.let { catatan ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    ItemDetailPekerja(
-                        pekerja = pekerja, // Pass the actual pekerja object
+                    ItemDetailCatatan(
+                        catatan = catatan, // Pass the actual pekerja object
                         onDeleteClick = onDeleteClick,
                         modifier = modifier
                     )
@@ -132,9 +132,9 @@ fun BodyDetailPekerja(
 
 
 @Composable
-fun ItemDetailPekerja(
+fun ItemDetailCatatan(
     modifier: Modifier = Modifier,
-    pekerja: Pekerja,
+    catatan: Catatan,
     onDeleteClick: () -> Unit
 ) {
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
@@ -150,11 +150,15 @@ fun ItemDetailPekerja(
         Column(
             modifier = modifier.padding(16.dp)
         ) {
-            ComponentDetailPekerja(judul = "Id Pekerja", isinya = pekerja.id_pekerja)
+            ComponentDetailPekerja(judul = "Id Pekerja", isinya = catatan.id_panen)
             Spacer(modifier = Modifier.padding(4.dp))
-            ComponentDetailPekerja(judul = "Nama Pekerja", isinya = pekerja.nama_pekerja)
+            ComponentDetailPekerja(judul = "Nama Pekerja", isinya = catatan.id_tanaman)
             Spacer(modifier = Modifier.padding(4.dp))
-            ComponentDetailPekerja(judul = "Jabatan", isinya = pekerja.jabatan)
+            ComponentDetailPekerja(judul = "Jabatan", isinya = catatan.tanggal_panen)
+            Spacer(modifier = Modifier.padding(4.dp))
+            ComponentDetailPekerja(judul = "Tanggal Panen", isinya = catatan.jumlah_panen)
+            Spacer(modifier = Modifier.padding(4.dp))
+            ComponentDetailPekerja(judul = "Jumlah Panen", isinya = catatan.keterangan)
             Spacer(modifier = Modifier.padding(10.dp))
 
             Button(
