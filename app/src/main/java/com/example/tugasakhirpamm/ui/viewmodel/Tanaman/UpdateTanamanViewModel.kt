@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.repository.TanamanRepository
-import com.example.tugasakhirpamm.ui.view.Tanaman.DestinasiTanamanUpdate
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiTanamanUpdate
 import kotlinx.coroutines.launch
 
 class UpdateTanamanViewModel(
@@ -39,7 +39,7 @@ class UpdateTanamanViewModel(
         }
     }
 
-    fun updateState(insertUiEvent: InsertUiEvent) {
+    fun updateState(insertUiEvent: InsertTnmUiEvent) {
         uiState = InsertUiState(
             insertUiEvent = insertUiEvent
         )

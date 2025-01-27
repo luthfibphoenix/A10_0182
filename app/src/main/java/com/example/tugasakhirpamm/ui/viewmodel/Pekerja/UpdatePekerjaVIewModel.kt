@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.repository.PekerjaRepository
-import com.example.tugasakhirpamm.ui.view.Pekerja.DestinasiPekerjaUpdate
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiPekerjaUpdate
 import kotlinx.coroutines.launch
 
 class UpdatePekerjaViewModel(

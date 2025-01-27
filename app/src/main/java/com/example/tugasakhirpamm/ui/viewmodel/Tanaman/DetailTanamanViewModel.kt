@@ -6,10 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.network.HttpException
+import retrofit2.HttpException
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.repository.TanamanRepository
-import com.example.tugasakhirpamm.ui.view.Tanaman.DestinasiDetailTanaman
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiDetailTanaman
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -43,9 +43,6 @@ class DetailTanamanViewModel(
                 DetailTnmUiState.Error
             } catch (e: HttpException) {
                 DetailTnmUiState.Error
-            } catch (e: Exception) {
-                // Log or track unexpected errors
-                DetailTnmUiState.Error
             }
         }
     }
@@ -55,13 +52,10 @@ class DetailTanamanViewModel(
             try {
                 tanaman.deleteTanaman(_idTanaman)
             } catch (e: IOException) {
-                // Handle error specific to delete operation if needed
                 tanamanDetailState = DetailTnmUiState.Error
             } catch (e: HttpException) {
-                // Handle error specific to delete operation if needed
                 tanamanDetailState = DetailTnmUiState.Error
             } catch (e: Exception) {
-                // Log unexpected errors
                 tanamanDetailState = DetailTnmUiState.Error
             }
         }

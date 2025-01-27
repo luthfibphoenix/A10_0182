@@ -41,19 +41,15 @@ import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiHomePekerja
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.view.Tanaman.HomeStatus
-import com.example.tugasakhirpamm.ui.view.Tanaman.TanamanLayout
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.HomePekerjaUiState
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.HomePekerjaViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeTanamanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeUiState
 
 
-object DestinasiHomePekerja: DestinasiNavigasi {
-    override val route ="home_pekerja"
-    override val titleRes = "Home Pekerja"
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -111,7 +107,7 @@ fun HomePekerjaStatus(
 ) {
     when (homePekerjaUiState) {
         is HomePekerjaUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
-        is HomePekerjaUiState.Success ->
+        is HomePekerjaUiState.Success -> {
             if (homePekerjaUiState.Pekerja.isEmpty()) {
                 Box(
                     modifier = modifier.fillMaxSize(),
@@ -121,22 +117,17 @@ fun HomePekerjaStatus(
                 }
             } else {
                 PekerjaLayout(
-                    pekerja = homePekerjaUiState.Pekerja,
+                    pekerja = homePekerjaUiState.Pekerja,  // Here you pass the list of pekerja
                     modifier = modifier.fillMaxWidth(),
-                    onDetailClick = {
-                        onDetailClick(it.id_pekerja)
-                    },
-                    onDeleteClick = { pekerja ->
-                        onDeleteClick(pekerja)
-                    }
+                    onDetailClick = { onDetailClick(it.id_pekerja) },
+                    onDeleteClick = { pekerja -> onDeleteClick(pekerja) }
                 )
             }
-        is HomePekerjaUiState.Error -> OnError(
-            retryAction,
-            modifier = modifier.fillMaxSize()
-        )
+        }
+        is HomePekerjaUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
     }
 }
+
 
 
 @Composable

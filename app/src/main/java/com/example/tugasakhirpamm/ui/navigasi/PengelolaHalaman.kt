@@ -134,7 +134,8 @@ fun PengelolaHalaman(
             idTanaman?.let {
                 DetailViewTanaman(
                     navigateBack = { navController.popBackStack() },
-                    navigateToEdit = { navController.navigate("${DestinasiTanamanUpdate.route}/$idTanaman") }
+                    onEditButton = { navController.navigate("${DestinasiTanamanUpdate.route}/$idTanaman") },
+                    onAddPanenButton = { navController.navigate(DestinasiInsertCatatan.route)}
                 )
             } ?: run {
                 Log.e("Navigasi", "ID Tanaman null")

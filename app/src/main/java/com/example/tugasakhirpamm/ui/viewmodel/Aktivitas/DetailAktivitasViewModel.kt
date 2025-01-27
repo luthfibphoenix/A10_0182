@@ -11,8 +11,7 @@ import com.example.tugasakhirpamm.model.Aktivitas
 import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.repository.AktivitasRepository
 import com.example.tugasakhirpamm.repository.PekerjaRepository
-import com.example.tugasakhirpamm.ui.view.Aktivitas.DestinasiDetailAktivitas
-import com.example.tugasakhirpamm.ui.view.Pekerja.DestinasiDetailPekerja
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiDetailAktivitas
 import kotlinx.coroutines.launch
 import java.io.IOException
 

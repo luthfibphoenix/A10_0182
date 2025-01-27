@@ -22,17 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiInsertTanaman
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertTanamanViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertUiEvent
+import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertTnmUiEvent
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertUiState
 import kotlinx.coroutines.launch
 
-object DestinasiInsertTanaman: DestinasiNavigasi {
-    override val route = "insert_tanaman"
-    override val titleRes = "Insert Tamaman"
-
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +70,7 @@ fun InsertTanamanScreen(
 @Composable
 fun EntryBody(
     insertUiState: InsertUiState,
-    onTanamanValueChange: (InsertUiEvent) -> Unit,
+    onTanamanValueChange: (InsertTnmUiEvent) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -101,9 +97,9 @@ fun EntryBody(
 @Composable
 
 fun FormInput(
-    insertUiEvent: InsertUiEvent,
+    insertUiEvent: InsertTnmUiEvent,
     modifier: Modifier = Modifier,
-    onValueChange:(InsertUiEvent)->Unit = {},
+    onValueChange:(InsertTnmUiEvent)->Unit = {},
     enabled: Boolean = true
 ){
     Column(

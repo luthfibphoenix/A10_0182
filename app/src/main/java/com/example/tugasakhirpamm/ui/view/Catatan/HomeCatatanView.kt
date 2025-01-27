@@ -47,10 +47,6 @@ import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.HomeCatatanUiState
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.HomeCatatanViewModel
 
-object DestinasiHomeCatatan : DestinasiNavigasi {
-    override val route = "home_catatan"
-    override val titleRes = "Home Catatan"
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

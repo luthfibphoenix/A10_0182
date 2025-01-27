@@ -18,22 +18,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiDetailTanaman
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.DetailTanamanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.DetailTnmUiState
 
-object DestinasiDetailTanaman : DestinasiNavigasi {
-    override val route = "item_detail"
-    override val titleRes = "Detail Tanaman"
-    const val TANAMAN = "idTanaman"
-    val routeWithArg = "$route/{$TANAMAN}"
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailViewTanaman(
     navigateBack: () -> Unit,
-    navigateToEdit: () -> Unit,
+    onEditButton: () -> Unit,
+    onAddPanenButton: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailTanamanViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
@@ -50,7 +47,7 @@ fun DetailViewTanaman(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = navigateToEdit,
+                onClick = onEditButton,
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(18.dp)
             ) {
@@ -68,7 +65,8 @@ fun DetailViewTanaman(
             onDeleteClick = {
                 viewModel.deleteTanaman()
                 navigateBack()
-            }
+            },
+            onAddPanenButton = onAddPanenButton
         )
     }
 }
@@ -78,7 +76,8 @@ fun BodyDetailTanaman(
     retryAction: () -> Unit,
     detailUiState: DetailTnmUiState,
     modifier: Modifier = Modifier,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onAddPanenButton: () -> Unit,
 ) {
     when (detailUiState) {
         is DetailTnmUiState.Loading -> {
@@ -108,7 +107,6 @@ fun BodyDetailTanaman(
             }
         }
 
-
         is DetailTnmUiState.Success -> {
             Column(
                 modifier = Modifier
@@ -118,6 +116,7 @@ fun BodyDetailTanaman(
                 ItemDetailTanaman(
                     tanaman = detailUiState.tanaman,
                     onDeleteClick = onDeleteClick,
+                    onAddPanenButton =onAddPanenButton,
                     modifier = modifier
                 )
             }
@@ -129,7 +128,8 @@ fun BodyDetailTanaman(
 fun ItemDetailTanaman(
     modifier: Modifier = Modifier,
     tanaman: Tanaman,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onAddPanenButton: () -> Unit,
 ) {
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
     Card(
@@ -160,6 +160,13 @@ fun ItemDetailTanaman(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Delete")
+            }
+
+            Button(
+                onClick = onAddPanenButton,
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Text(text = "Add Panen")
             }
 
             if (deleteConfirmationRequired) {

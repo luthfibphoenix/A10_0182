@@ -18,15 +18,9 @@ import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
+import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPekerjaUiState
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPekerjaViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPkrUiState
 
-object DestinasiDetailPekerja : DestinasiNavigasi {
-    override val route = "item_detail"
-    override val titleRes = "Detail Pekerja"
-    const val PEKERJA = "idPekerja"
-    val routeWithArg = "$route/{$PEKERJA}"
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +61,9 @@ fun DetailViewPekerja(
                 viewModel.getPekerjaById() // Fix the call here
             },
             onDeleteClick = {
-                viewModel.deletePekerja()
+                viewModel.deletePekerja(viewModel.pekerjaDetailState.let { state ->
+                    if (state is DetailPekerjaUiState.Success)  state.pekerja.id_pekerja else ""
+                })
                 navigateBack()
             }
         )
@@ -78,12 +74,12 @@ fun DetailViewPekerja(
 @Composable
 fun BodyDetailPekerja(
     retryAction: () -> Unit,
-    detailPekerjaUiState: DetailPkrUiState,
+    detailPekerjaUiState: DetailPekerjaUiState,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit
 ) {
     when (detailPekerjaUiState) {
-        is DetailPkrUiState.Loading -> {
+        is DetailPekerjaUiState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -91,7 +87,7 @@ fun BodyDetailPekerja(
                 CircularProgressIndicator()
             }
         }
-        is DetailPkrUiState.Error -> {
+        is DetailPekerjaUiState.Error -> {
             Box(
                 modifier = modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -108,8 +104,7 @@ fun BodyDetailPekerja(
                 }
             }
         }
-        is DetailPkrUiState.Success -> {
-            // Check if pekerja is null and handle accordingly
+        is DetailPekerjaUiState.Success -> {
             detailPekerjaUiState.pekerja?.let { pekerja ->
                 Column(
                     modifier = Modifier
@@ -117,14 +112,11 @@ fun BodyDetailPekerja(
                         .padding(16.dp)
                 ) {
                     ItemDetailPekerja(
-                        pekerja = pekerja, // Pass the actual pekerja object
+                        pekerja = pekerja,
                         onDeleteClick = onDeleteClick,
                         modifier = modifier
                     )
                 }
-            } ?: run {
-                // Handle the case when pekerja is null
-                Text("Pekerja data is not available.")
             }
         }
     }

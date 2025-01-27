@@ -41,12 +41,7 @@ import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailAktUiState
 import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailAktivitasViewModel
 
-object DestinasiDetailAktivitas : DestinasiNavigasi {
-    override val route = "item_detail"
-    override val titleRes = "Detail Aktivitas"
-    const val AKTIVITAS = "idAktivitas"
-    val routeWithArg = "$route/{$AKTIVITAS}"
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

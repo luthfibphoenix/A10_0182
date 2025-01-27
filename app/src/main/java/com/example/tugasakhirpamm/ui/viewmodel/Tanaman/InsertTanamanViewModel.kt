@@ -14,7 +14,7 @@ class InsertTanamanViewModel(private val tanamanRepository: TanamanRepository) :
     var uiState by mutableStateOf(InsertUiState())
         private set
 
-    fun updateTanamanState(insertUiEvent: InsertUiEvent) {
+    fun updateTanamanState(insertUiEvent: InsertTnmUiEvent) {
         uiState = uiState.copy(insertUiEvent = insertUiEvent)
     }
 
@@ -29,7 +29,7 @@ class InsertTanamanViewModel(private val tanamanRepository: TanamanRepository) :
     }
 }
 
-fun InsertUiEvent.toTanaman(): Tanaman = Tanaman(
+fun InsertTnmUiEvent.toTanaman(): Tanaman = Tanaman(
     id_tanaman = idTanaman,
     nama_tanaman = namaTanaman,
     periode_tanaman = periodeTanaman,
@@ -40,14 +40,14 @@ fun Tanaman.toUiStateTanaman(): InsertUiState = InsertUiState(
     insertUiEvent = this.toInsertUiEventTnm()
 )
 
-data class InsertUiEvent(
+data class InsertTnmUiEvent(
     val idTanaman: String = "",
     val namaTanaman: String = "",
     val periodeTanaman: String = "",
     val deskripsiTanaman: String = ""
 )
 
-fun Tanaman.toInsertUiEventTnm(): InsertUiEvent = InsertUiEvent(
+fun Tanaman.toInsertUiEventTnm(): InsertTnmUiEvent = InsertTnmUiEvent(
     idTanaman = id_tanaman,
     namaTanaman = nama_tanaman,
     periodeTanaman = periode_tanaman,
@@ -55,5 +55,5 @@ fun Tanaman.toInsertUiEventTnm(): InsertUiEvent = InsertUiEvent(
 )
 
 data class InsertUiState(
-    val insertUiEvent: InsertUiEvent = InsertUiEvent()
+    val insertUiEvent: InsertTnmUiEvent = InsertTnmUiEvent()
 )

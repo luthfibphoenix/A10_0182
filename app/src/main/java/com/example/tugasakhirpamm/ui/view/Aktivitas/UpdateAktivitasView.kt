@@ -12,16 +12,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiAktivitasUpdate
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.UpdateAktivitasViewModel
 import kotlinx.coroutines.launch
 
-object DestinasiAktivitasUpdate : DestinasiNavigasi {
-    override val route = "update"
-    override val titleRes = "Update Aktivitas" // Updated title to reflect 'Pekerja'
-    const val AKTIVITAS = "id Aktivitas"
-    val routeWithArg = "$route/{$AKTIVITAS}"
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

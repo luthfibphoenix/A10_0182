@@ -44,12 +44,10 @@ import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiHomeAktivitas
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 
-object DestinasiHomeAktivitas: DestinasiNavigasi {
-    override val route ="home_aktivitas"
-    override val titleRes = "Home Aktivitas"
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

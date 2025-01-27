@@ -9,65 +9,55 @@ import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
 import com.example.tugasakhirpamm.model.Catatan
 import com.example.tugasakhirpamm.repository.CatatanRepository
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiDetailCatatan
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-sealed class DetailCatUiState {
-    data class Success(val catatan: Catatan?) : DetailCatUiState()  // Success state with nullable catatan
-    data class Error(val message: String? = null) : DetailCatUiState()
-    object Loading : DetailCatUiState()
+sealed class DetailCatatanUiState {
+    data class Success(val catatan: Catatan?) : DetailCatatanUiState()
+    object Error : DetailCatatanUiState()
+    object Loading : DetailCatatanUiState()
 }
 
 class DetailCatatanViewModel(
     savedStateHandle: SavedStateHandle,
-    private val catatanRepository: CatatanRepository
+    private val catatan: CatatanRepository
 ) : ViewModel() {
 
-    var catatanDetailState: DetailCatUiState by mutableStateOf(DetailCatUiState.Loading)
+    var catatanDetailState: DetailCatatanUiState by mutableStateOf(DetailCatatanUiState.Loading)
         private set
 
-    private val _idPenen: String? = savedStateHandle["catatanId"]  // Replace this with your actual key
+    private val _idCatatan: String = checkNotNull(savedStateHandle[DestinasiDetailCatatan.CATATAN])
 
-    // Property for idCatatan with null safety
-    val idCatatan: String
-        get() = _idPenen ?: throw IllegalStateException("ID Catatan tidak ditemukan")
+    init {
+        getCatatanById()
+    }
 
-    // Fetch Catatan by ID
     fun getCatatanById() {
-        _idPenen?.let { id ->
-            viewModelScope.launch {
-                catatanDetailState = DetailCatUiState.Loading
-                try {
-                    val fetchedCatatan = catatanRepository.getCatatanById(id)
-                    catatanDetailState = DetailCatUiState.Success(fetchedCatatan)
-                } catch (e: IOException) {
-                    catatanDetailState = DetailCatUiState.Error("Tidak ada koneksi internet")
-                } catch (e: HttpException) {
-                    catatanDetailState = DetailCatUiState.Error("Gagal memuat data catatan")
-                }
+        viewModelScope.launch {
+            catatanDetailState = DetailCatatanUiState.Loading
+            catatanDetailState = try {
+                val catatan = catatan.getCatatanById(_idCatatan)
+                DetailCatatanUiState.Success(catatan)
+            } catch (e: IOException) {
+                DetailCatatanUiState.Error
+            } catch (e: retrofit2.HttpException) {
+                DetailCatatanUiState.Error
             }
-        } ?: run {
-            catatanDetailState = DetailCatUiState.Error("ID Catatan tidak ditemukan")
         }
     }
 
-    // Function to delete Catatan
     fun deleteCatatan() {
-        _idPenen?.let {
-            viewModelScope.launch {
-                try {
-                    // Hapus catatan dari repository
-                    catatanRepository.deleteCatatan(it)
-                    // Reset state setelah penghapusan berhasil
-                    catatanDetailState = DetailCatUiState.Success(null)  // Optionally set to null or Loading after deletion
-                } catch (e: IOException) {
-                    catatanDetailState = DetailCatUiState.Error("Tidak ada koneksi internet")
-                } catch (e: HttpException) {
-                    catatanDetailState = DetailCatUiState.Error("Gagal menghapus catatan")
-                }
+        viewModelScope.launch {
+            try {
+                catatan.deleteCatatan(_idCatatan)
+            } catch (e: IOException) {
+                DetailCatatanUiState.Error
+            } catch (e: retrofit2.HttpException) {
+                DetailCatatanUiState.Error
+            } catch (e: Exception) {
+                DetailCatatanUiState.Error
             }
-        } ?: run {
-            catatanDetailState = DetailCatUiState.Error("ID Catatan tidak ditemukan")
         }
     }
 }

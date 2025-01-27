@@ -24,19 +24,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiInsertCatatan
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.InsertCatatanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.InsertUiEventCatatan
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.InsertUiStateCat
 import kotlinx.coroutines.launch
-
-
-object DestinasiInsertCatatan : DestinasiNavigasi {
-    override val route = "insert_catatan"
-    override val titleRes = "Insert Catatan"
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -132,16 +128,6 @@ fun FormInput(
             value = insertUiEvent.idPanen,
             onValueChange = { onValueChange(insertUiEvent.copy(idPanen = it)) },
             label = { Text("ID Panen") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        // ID Tanaman TextField
-        OutlinedTextField(
-            value = insertUiEvent.idTanaman,
-            onValueChange = { onValueChange(insertUiEvent.copy(idTanaman = it)) },
-            label = { Text("ID Tanaman") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true

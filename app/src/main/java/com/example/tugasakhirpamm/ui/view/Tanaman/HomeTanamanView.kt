@@ -43,11 +43,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiHomeTanaman
 
-object DestinasiHomeTanaman: DestinasiNavigasi {
-    override val route ="home_tanaman"
-    override val titleRes = "Home Tanaman"
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +81,8 @@ fun HomeViewTanaman(
         HomeStatus(
             homeUiState = viewModel.tanamanUiState,
             retryAction = {viewModel.getTanaman()}, modifier = Modifier.padding(innerPadding),
-            onDetailClick = onDetailTanamanClick,onDeleteClick = {
+            onDetailClick = onDetailTanamanClick,
+            onDeleteClick = {
                 viewModel.deleteTanaman(it.id_tanaman)
                 viewModel.getTanaman()
             }

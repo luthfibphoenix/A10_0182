@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhirpamm.model.Catatan
 import com.example.tugasakhirpamm.repository.CatatanRepository
-import com.example.tugasakhirpamm.ui.view.Catatan.DestinasiCatatanUpdate
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiCatatanUpdate
 import kotlinx.coroutines.launch
 
 class UpdateCatatanViewModel(

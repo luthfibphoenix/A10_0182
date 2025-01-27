@@ -22,17 +22,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiInsertPekerja
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertPekerjaViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertUiEventPekerja
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.InsertUiStatePkr
-import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertUiEvent
 import kotlinx.coroutines.launch
 
-object DestinasiInsertPekerja : DestinasiNavigasi {
-    override val route = "insert_pekerja"
-    override val titleRes = "Insert Pekerja"
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.tugasakhirpamm.model.Aktivitas
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.repository.AktivitasRepository
-import com.example.tugasakhirpamm.ui.view.Aktivitas.DestinasiAktivitasUpdate
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiAktivitasUpdate
 import kotlinx.coroutines.launch
 
 class UpdateAktivitasViewModel(

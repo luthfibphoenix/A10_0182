@@ -17,7 +17,7 @@ sealed class HomePekerjaUiState{
     object Loading : HomePekerjaUiState()
 }
 
-class HomePekerjaViewModel(private val pekerja: PekerjaRepository): ViewModel(){
+class HomePekerjaViewModel(private val pekerja: PekerjaRepository) : ViewModel() {
     var pekerjaUiState: HomePekerjaUiState by mutableStateOf(HomePekerjaUiState.Loading)
         private set
 
@@ -25,27 +25,30 @@ class HomePekerjaViewModel(private val pekerja: PekerjaRepository): ViewModel(){
         getpekerja()
     }
 
-    fun getpekerja(){
+    // Fetch the list of workers
+    fun getpekerja() {
         viewModelScope.launch {
             pekerjaUiState = HomePekerjaUiState.Loading
             pekerjaUiState = try {
                 HomePekerjaUiState.Success(pekerja.getPekerja().data)
-            } catch (e: IOException){
+            } catch (e: IOException) {
                 HomePekerjaUiState.Error
-            } catch (e: HttpException){
+            } catch (e: HttpException) {
                 HomePekerjaUiState.Error
             }
         }
     }
 
-    fun deletePekerja(id_pekerja: String){
+    // Delete a worker and refresh the list
+    fun deletePekerja(id_pekerja: String) {
         viewModelScope.launch {
             try {
                 pekerja.deletePekerja(id_pekerja)
+                getpekerja()  // Refresh the list after deletion
             } catch (e: IOException) {
-                HomePekerjaUiState.Error
-            }catch (e : HttpException){
-                HomePekerjaUiState.Error
+                pekerjaUiState = HomePekerjaUiState.Error  // Set to Error state
+            } catch (e: HttpException) {
+                pekerjaUiState = HomePekerjaUiState.Error  // Set to Error state
             }
         }
     }

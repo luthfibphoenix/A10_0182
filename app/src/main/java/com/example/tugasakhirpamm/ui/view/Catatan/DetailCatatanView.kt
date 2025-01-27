@@ -1,7 +1,6 @@
 package com.example.tugasakhirpamm.ui.view.Catatan
 
 import com.example.tugasakhirpamm.model.Catatan
-import com.example.tugasakhirpamm.ui.viewmodel.Catatan.DetailCatUiState
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.DetailCatatanViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -20,13 +19,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.DetailCatatanUiState
 
-object DestinasiDetailCatatan : DestinasiNavigasi {
-    override val route = "item_detail"
-    override val titleRes = "Detail Catatan"
-    const val CATATAN = "idCatatan"
-    val routeWithArg = "$route/{$CATATAN}"
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,12 +73,12 @@ fun DetailViewCatatan(
 @Composable
 fun BodyDetailCatatan(
     retryAction: () -> Unit,
-    detailCatatanUiState: DetailCatUiState,
+    detailCatatanUiState: DetailCatatanUiState,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit
 ) {
     when (detailCatatanUiState) {
-        is DetailCatUiState.Loading -> {
+        is DetailCatatanUiState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -91,7 +86,7 @@ fun BodyDetailCatatan(
                 CircularProgressIndicator()
             }
         }
-        is DetailCatUiState.Error -> {
+        is DetailCatatanUiState.Error -> {
             Box(
                 modifier = modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -108,7 +103,7 @@ fun BodyDetailCatatan(
                 }
             }
         }
-        is DetailCatUiState.Success -> {
+        is DetailCatatanUiState.Success -> {
             // Check if pekerja is null and handle accordingly
             detailCatatanUiState.catatan?.let { catatan ->
                 Column(
