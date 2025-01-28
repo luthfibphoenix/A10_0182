@@ -39,7 +39,7 @@ fun UpdatePekerjaScreen(
             CostumeTopAppBar(
                 title = DestinasiPekerjaUpdate.titleRes,
                 canNavigateBack = true,
-                navigateUp = navigateBack
+                navigatBack = navigateBack
             )
         }
     ) { padding ->

@@ -48,7 +48,7 @@ fun InsertPekerjaScreen(
                 title = DestinasiInsertPekerja.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
-                navigateUp = navigateBack
+                navigatBack = navigateBack
             )
         }
     ) { innerPadding ->

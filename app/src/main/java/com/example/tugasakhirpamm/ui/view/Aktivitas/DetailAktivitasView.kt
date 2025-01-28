@@ -58,7 +58,7 @@ fun DetailViewAktivitas(
                 title = "Detail Aktivitas",
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
-                navigateUp = navigateBack
+                navigatBack = navigateBack
             )
         },
         floatingActionButton = {

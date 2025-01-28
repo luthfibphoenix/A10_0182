@@ -11,8 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.tugasakhirpamm.ui.view.Aktivitas.*
 import com.example.tugasakhirpamm.ui.view.Catatan.*
+import com.example.tugasakhirpamm.ui.view.DestinasiMainMenu
 import com.example.tugasakhirpamm.ui.view.HomeView
-import com.example.tugasakhirpamm.ui.view.MainMenu
 import com.example.tugasakhirpamm.ui.view.Pekerja.*
 import com.example.tugasakhirpamm.ui.view.Tanaman.*
 
@@ -23,11 +23,11 @@ fun PengelolaHalaman(
 ) {
     NavHost(
         navController = navController,
-        startDestination = MainMenu.route,
+        startDestination = DestinasiMainMenu.route,
         modifier = modifier
     ) {
         // Main Menu
-        composable(MainMenu.route) {
+        composable(DestinasiMainMenu.route) {
             HomeView(
                 onTanamanButton = {
                     navController.navigate(DestinasiHomeTanaman.route)
@@ -48,7 +48,7 @@ fun PengelolaHalaman(
         composable(DestinasiHomePekerja.route) {
             HomeViewPekerja(
                 navigateToItemEntryPekerja = { navController.navigate(DestinasiInsertPekerja.route) },
-                onBackClick = { navController.popBackStack() },
+                onBackClick = { navController.popBackStack() }, 
                 onDetailPekerjaClick = { idPekerja ->
                     if (idPekerja.isNotBlank()) {
                         navController.navigate("${DestinasiDetailPekerja.route}/$idPekerja")
@@ -105,7 +105,7 @@ fun PengelolaHalaman(
         composable(DestinasiHomeTanaman.route) {
             HomeViewTanaman(
                 navigateToItemEntry = { navController.navigate(DestinasiInsertTanaman.route) },
-                onBackClick = { navController.popBackStack() },
+                { navController.popBackStack() },
                 onDetailTanamanClick = { idTanaman ->
                     if (idTanaman.isNotBlank()) {
                         navController.navigate("${DestinasiDetailTanaman.route}/$idTanaman")

@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 
-object MainMenu: DestinasiNavigasi {
+object DestinasiMainMenu: DestinasiNavigasi {
     override val route = "main_menu"
     override val titleRes = "Main Menu"
 }

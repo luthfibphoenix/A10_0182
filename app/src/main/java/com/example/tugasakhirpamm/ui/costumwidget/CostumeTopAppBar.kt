@@ -20,24 +20,30 @@ fun CostumeTopAppBar(
     canNavigateBack: Boolean,
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    navigateUp: () -> Unit = {},
+    navigatBack: () -> Unit = {},
     onRefresh: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = { Text(title) },
         actions = {
-            Icon(
-                imageVector = Icons.Default.Refresh,
-                contentDescription = "",
-                modifier = Modifier.clickable { onRefresh() }
-            )
+            // Tombol Refresh dengan deskripsi untuk aksesibilitas
+            IconButton(onClick = { onRefresh() }) {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "Segarkan"
+                )
+            }
         },
         modifier = modifier,
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
+                // Tombol Back
+                IconButton(onClick = navigatBack) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Kembali"
+                    )
                 }
             }
         }

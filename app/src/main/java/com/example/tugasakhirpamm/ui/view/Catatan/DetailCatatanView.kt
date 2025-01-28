@@ -38,7 +38,7 @@ fun DetailViewCatatan(
                 title = "Detail Catatan",
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
-                navigateUp = navigateBack
+                navigatBack = navigateBack
             )
         },
         floatingActionButton = {

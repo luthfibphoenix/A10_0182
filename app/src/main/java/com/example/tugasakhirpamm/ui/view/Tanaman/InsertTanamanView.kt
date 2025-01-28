@@ -46,7 +46,7 @@ fun InsertTanamanScreen(
                 title = DestinasiInsertTanaman.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
-                navigateUp = navigateBack
+                navigatBack = navigateBack
             )
         }
     ) { innerPadding ->

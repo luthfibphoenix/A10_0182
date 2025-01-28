@@ -38,7 +38,7 @@ fun DetailViewPekerja(
                 title = "Detail Pekerja",
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
-                navigateUp = navigateBack
+                navigatBack = navigateBack
             )
         },
         floatingActionButton = {

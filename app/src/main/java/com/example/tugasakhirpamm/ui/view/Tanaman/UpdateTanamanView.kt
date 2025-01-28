@@ -37,7 +37,7 @@ fun UpdateTanamanView(
             CostumeTopAppBar(
                 title = DestinasiTanamanUpdate.titleRes,
                 canNavigateBack = true,
-                navigateUp = navigateBack
+                navigatBack = navigateBack
             )
         }
     ){
