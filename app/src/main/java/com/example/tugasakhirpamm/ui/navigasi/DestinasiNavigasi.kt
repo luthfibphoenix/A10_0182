@@ -7,7 +7,7 @@ interface DestinasiNavigasi {
 
 //AKTIVITAS
 object DestinasiDetailAktivitas : DestinasiNavigasi {
-    override val route = "item_detail"
+    override val route = "detail_aktivitas"
     override val titleRes = "Detail Aktivitas"
     const val AKTIVITAS = "idAktivitas"
     val routeWithArg = "$route/{$AKTIVITAS}"
@@ -24,7 +24,7 @@ object DestinasiInsertAktivitas : DestinasiNavigasi {
 }
 
 object DestinasiAktivitasUpdate : DestinasiNavigasi {
-    override val route = "update"
+    override val route = "update_aktivitas"
     override val titleRes = "Update Aktivitas" // Updated title to reflect 'Pekerja'
     const val AKTIVITAS = "idAktivitas"
     val routeWithArg = "$route/{$AKTIVITAS}"
@@ -32,7 +32,7 @@ object DestinasiAktivitasUpdate : DestinasiNavigasi {
 
 //CATATAN
 object DestinasiDetailCatatan : DestinasiNavigasi {
-    override val route = "item_detail"
+    override val route = "detail_catatan"
     override val titleRes = "Detail Catatan"
     const val CATATAN = "idCatatan"
     val routeWithArg = "$route/{$CATATAN}"
@@ -57,7 +57,7 @@ object DestinasiCatatanUpdate : DestinasiNavigasi {
 
 //PEKERJA
 object DestinasiDetailPekerja : DestinasiNavigasi {
-    override val route = "item_detail"
+    override val route = "detail_pekerja"
     override val titleRes = "Detail Pekerja"
     const val PEKERJA = "idPekerja"
     val routeWithArg = "$route/{$PEKERJA}"
@@ -74,7 +74,7 @@ object DestinasiInsertPekerja : DestinasiNavigasi {
 }
 
 object DestinasiPekerjaUpdate : DestinasiNavigasi {
-    override val route = "update"
+    override val route = "update_pekerja"
     override val titleRes = "Update Pekerja" // Updated title to reflect 'Pekerja'
     const val PEKERJA = "id Pekerja"
     val routeWithArg = "$route/{$PEKERJA}"
@@ -101,7 +101,7 @@ object DestinasiInsertTanaman: DestinasiNavigasi {
 }
 
 object DestinasiTanamanUpdate : DestinasiNavigasi {
-    override val route = "update"
+    override val route = "update_tanaman"
     override val titleRes = "Update Tanaman"
     const val TANAMAN = "idTanaman"
     val routeWithArg = "$route/{$TANAMAN}"
