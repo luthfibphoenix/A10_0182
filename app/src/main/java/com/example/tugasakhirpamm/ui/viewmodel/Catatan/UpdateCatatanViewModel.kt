@@ -11,10 +11,6 @@ import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.repository.CatatanRepository
 import com.example.tugasakhirpamm.repository.TanamanRepository
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiCatatanUpdate
-import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanEvent
-import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanFormErrorState
-import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanUiState
-import com.example.tugasakhirpamm.ui.viewmodel.catatan.toCatatan
 import kotlinx.coroutines.launch
 
 class UpdateCatatanViewModel(

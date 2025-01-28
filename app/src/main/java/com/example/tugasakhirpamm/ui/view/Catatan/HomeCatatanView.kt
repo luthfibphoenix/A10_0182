@@ -1,8 +1,5 @@
 package com.example.tugasakhirpamm.ui.view.Catatan
 
-import com.example.tugasakhirpamm.model.Aktivitas
-import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.HomeAktivitasUiState
-import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.HomeAktivitasViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +40,6 @@ import com.example.tugasakhirpamm.R
 import com.example.tugasakhirpamm.model.Catatan
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
-import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.HomeCatatanUiState
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.HomeCatatanViewModel
 

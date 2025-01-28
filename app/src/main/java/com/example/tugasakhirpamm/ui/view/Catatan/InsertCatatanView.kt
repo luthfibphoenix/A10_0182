@@ -29,10 +29,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
-import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanEvent
-import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanFormErrorState
-import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanUiState
-import com.example.tugasakhirpamm.ui.viewmodel.catatan.InsertCatatanViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.CatatanEvent
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.CatatanFormErrorState
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.CatatanUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Catatan.InsertCatatanViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

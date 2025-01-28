@@ -7,53 +7,102 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhirpamm.model.Aktivitas
+import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.repository.AktivitasRepository
+import com.example.tugasakhirpamm.repository.PekerjaRepository
+import com.example.tugasakhirpamm.repository.TanamanRepository
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiAktivitasUpdate
 import kotlinx.coroutines.launch
 
 class UpdateAktivitasViewModel(
     savedStateHandle: SavedStateHandle,
-    private val aktivitasRepository: AktivitasRepository
-) : ViewModel() {
-    var updatePkrUiState by mutableStateOf(InsertUiStateAkt())
+    private val aktivitas: AktivitasRepository,
+    private val tanamanRepository: TanamanRepository,
+    private val pekerjaRepository: PekerjaRepository
+): ViewModel() {
+
+    var tanamanList by mutableStateOf<List<Tanaman>>(emptyList())
+        private set
+
+    var pekerjaList by mutableStateOf<List<Pekerja>>(emptyList())
+        private set
+
+    var updateUiStateAktivitas by mutableStateOf(AktivitasUiState())
         private set
 
     private val _idAktivitas: String = checkNotNull(savedStateHandle[DestinasiAktivitasUpdate.AKTIVITAS])
 
     init {
-        // Memuat data Aktivitas untuk diupdate berdasarkan ID
         viewModelScope.launch {
-            try {
-                val aktivitas = aktivitasRepository.getAktivitasById(_idAktivitas)
-                updatePkrUiState = aktivitas.toUiStateAktUpdate()
-            } catch (e: Exception) {
-                e.printStackTrace() // Tangani error jika terjadi
+            // Fetch aktivitas data by ID and update the UI state
+            val aktivitasData = aktivitas.getAktivitasById(_idAktivitas)
+            if (aktivitasData != null) {
+                updateUiStateAktivitas = aktivitasData.toUiStateAktivitas() // Pastikan fungsi ini mengembalikan AktivitasUiState
+            } else {
+                updateUiStateAktivitas = updateUiStateAktivitas.copy(
+                    snackBarMessage = "Aktivitas tidak ditemukan"
+                )
             }
+        }
+
+
+        viewModelScope.launch {
+            // Fetch tanaman list and update the UI state
+            val tanamanListFromRepo = tanamanRepository.getTanaman() // Get full list, not just first item
+            updateUiStateAktivitas = updateUiStateAktivitas.copy(tanamanList = tanamanListFromRepo)
+            val pekerjaListFromRepo = pekerjaRepository.getPekerja()
+            updateUiStateAktivitas = updateUiStateAktivitas.copy(pekerjaList = pekerjaListFromRepo)
         }
     }
 
-    // Fungsi untuk update aktivitas
-    fun updateAktivitas() {
-        viewModelScope.launch {
-            try {
-                val aktivitas = updatePkrUiState.insertUiEventAkt.toAktivitas()
-                aktivitasRepository.updateAktivitas(_idAktivitas, aktivitas)
-            } catch (e: Exception) {
-                e.printStackTrace() // Tangani error jika terjadi
-            }
-        }
+    fun updateState(AktivitasEvent: AktivitasEvent) {
+        updateUiStateAktivitas = updateUiStateAktivitas.copy(aktivitasEvent = AktivitasEvent())
     }
 
-    // Update state ketika terjadi perubahan pada UI event
-    fun updateState(insertUiEventAkt: InsertUiEventAktivitas) {
-        updatePkrUiState = InsertUiStateAkt(
-            insertUiEventAkt = insertUiEventAkt
+    fun validateFields(): Boolean {
+        val event = updateUiStateAktivitas.aktivitasEvent
+        val errorState = AktivitasFormErrorState(
+            id_aktivitas = if (event.id_aktivitas.isNotBlank()) null else "Id Panen tidak boleh kosong",
+            id_tanaman = if (event.id_tanaman.isNotBlank()) null else "Id Tanaman tidak boleh kosong",
+            id_pekerja = if (event.id_pekerja.isNotBlank()) null else "Tanggal Panen tidak boleh kosong",
+            tanggal_aktivitas = if (event.tanggal_aktivitas.isNotBlank()) null else "Jumlah Panen tidak boleh kosong",
+            deskripsi_aktivitas = if (event.deskripsi_aktivitas.isNotBlank()) null else "Keterangan tidak boleh kosong"
         )
+        updateUiStateAktivitas = updateUiStateAktivitas.copy(isEntryValid = errorState)
+        return errorState.isValid()
+    }
+
+    fun updateAktivitas() {
+        val currentEvent = updateUiStateAktivitas.aktivitasEvent
+        if (validateFields()) {
+            viewModelScope.launch {
+                try {
+                    // Ensure you're passing the correct ID and Catatan object to the update function
+                    aktivitas.updateAktivitas(_idAktivitas, currentEvent.toAktivitasEntity()) // Pass ID and Catatan object
+                    updateUiStateAktivitas = updateUiStateAktivitas.copy(
+                        snackBarMessage = "Data berhasil diperbarui",
+                        aktivitasEvent = AktivitasEvent(),
+                        isEntryValid = AktivitasFormErrorState()
+                    )
+                } catch (e: Exception) {
+                    updateUiStateAktivitas = updateUiStateAktivitas.copy(
+                        snackBarMessage = "Gagal memperbarui data. Periksa koneksi internet."
+                    )
+                }
+            }
+        } else {
+            updateUiStateAktivitas = updateUiStateAktivitas.copy(
+                snackBarMessage = "Periksa kembali data yang dimasukkan"
+            )
+        }
+    }
+
+    fun resetSnackbarMessage() {
+        updateUiStateAktivitas = updateUiStateAktivitas.copy(snackBarMessage = null)
     }
 }
 
-// Extension function to convert Aktivitas to InsertUiStateAkt for updating
-fun Aktivitas.toUiStateAktUpdate() = InsertUiStateAkt(
-    insertUiEventAkt = this.toInsertUiEventAkt()
+fun Aktivitas.toUiStateAktivitas(): AktivitasUiState = AktivitasUiState(
+    aktivitasEvent = this.toDetailAktivitas() // Pastikan toDetailAktivitas() mengembalikan data yang sesuai
 )

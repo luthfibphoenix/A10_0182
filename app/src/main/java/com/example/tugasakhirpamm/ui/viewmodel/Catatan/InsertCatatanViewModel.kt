@@ -1,4 +1,4 @@
-package com.example.tugasakhirpamm.ui.viewmodel.catatan
+package com.example.tugasakhirpamm.ui.viewmodel.Catatan
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

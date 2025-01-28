@@ -14,12 +14,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tugasakhirpamm.model.Catatan
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
-import com.example.tugasakhirpamm.ui.navigasi.DestinasiCatatanUpdate
-import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.UpdateAktivitasViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.UpdateCatatanViewModel
 import kotlinx.coroutines.launch
 

@@ -8,24 +8,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
 import com.example.tugasakhirpamm.model.Aktivitas
-import com.example.tugasakhirpamm.model.Pekerja
 import com.example.tugasakhirpamm.repository.AktivitasRepository
 import com.example.tugasakhirpamm.repository.PekerjaRepository
+import com.example.tugasakhirpamm.repository.TanamanRepository
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiDetailAktivitas
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-sealed class DetailAktUiState {
-    data class Success(val aktivitas: Aktivitas) : DetailAktUiState()
-    object Error : DetailAktUiState()
-    object Loading : DetailAktUiState()
+sealed class DetailAktivitasUiState {
+    data class Success(val aktivitas: Aktivitas) : DetailAktivitasUiState()
+    object Error : DetailAktivitasUiState()
+    object Loading : DetailAktivitasUiState()
 }
 
 class DetailAktivitasViewModel(
     savedStateHandle: SavedStateHandle,
-    private val aktivitas: AktivitasRepository
+    private val aktivitas: AktivitasRepository,
+    private val pekerja: PekerjaRepository,
+    private val tanaman: TanamanRepository
+
 ) : ViewModel() {
-    var aktivitasDetailState: DetailAktUiState by mutableStateOf(DetailAktUiState.Loading)
+
+    var aktivitasDetailState: DetailAktivitasUiState by mutableStateOf(DetailAktivitasUiState.Loading)
         private set
 
     private val _idAktivitas: String = checkNotNull(savedStateHandle[DestinasiDetailAktivitas.AKTIVITAS])
@@ -36,14 +40,14 @@ class DetailAktivitasViewModel(
 
     fun getAktivitasById() {
         viewModelScope.launch {
-            aktivitasDetailState = DetailAktUiState.Loading
+            aktivitasDetailState = DetailAktivitasUiState.Loading
             aktivitasDetailState = try {
                 val fetchedAktivitas= aktivitas.getAktivitasById(_idAktivitas)
-                DetailAktUiState.Success(fetchedAktivitas)
+                DetailAktivitasUiState.Success(fetchedAktivitas)
             } catch (e: IOException) {
-                DetailAktUiState.Error
+                DetailAktivitasUiState.Error
             } catch (e: HttpException) {
-                DetailAktUiState.Error
+                DetailAktivitasUiState.Error
             }
         }
     }
@@ -59,4 +63,12 @@ class DetailAktivitasViewModel(
             }
         }
     }
+}
+fun Aktivitas.toDetailAktivitas(): AktivitasEvent {
+    return AktivitasEvent(
+        id_aktivitas = id_aktivitas,
+        id_pekerja = id_pekerja,
+        tanggal_aktivitas = tanggal_aktivitas,
+        deskripsi_aktivitas = deskripsi_aktivitas
+    )
 }

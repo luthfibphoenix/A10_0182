@@ -6,11 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.network.HttpException
 import com.example.tugasakhirpamm.model.Catatan
 import com.example.tugasakhirpamm.repository.CatatanRepository
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiDetailCatatan
-import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanEvent
 import kotlinx.coroutines.launch
 import java.io.IOException
 

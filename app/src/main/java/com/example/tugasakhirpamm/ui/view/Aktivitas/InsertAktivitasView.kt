@@ -17,6 +17,8 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -26,7 +28,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,9 +40,12 @@ import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiInsertAktivitas
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.InsertAktivitasViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.InsertUiEventAktivitas
-import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.InsertUiStateAkt
+import com.example.tugasakhirpamm.ui.view.Catatan.FormCatatan
+import com.example.tugasakhirpamm.ui.view.Catatan.InsertBodyCatatan
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.AktivitasEvent
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.AktivitasFormErrorState
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.AktivitasUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.InsertAktViewModel
 import kotlinx.coroutines.launch
 
 
@@ -46,172 +53,209 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InsertAktivitasScreen(
-    navigateBack: () -> Unit,
+    onBack: () -> Unit,
+    onNavigate: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: InsertAktivitasViewModel = viewModel(factory = PenyediaViewModel.Factory)
+    viewModel: InsertAktViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
+    val uiState = viewModel.uiState
+    val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    // Fetch Tanaman dan Pekerja berdasarkan ID
-    val selectedTanamanId = "some-tanaman-id" // Ganti dengan ID Tanaman yang diinginkan
-    val selectedPekerjaId = "some-pekerja-id"  // Ganti dengan ID Pekerja yang diinginkan
-
-    // Call fetchTanamanAndPekerja saat screen pertama kali dibuka
-    LaunchedEffect(true) {
-        viewModel.fetchTanamanAndPekerja(
-            idTanaman = selectedTanamanId,
-            idPekerja = selectedPekerjaId,
-            onSuccess = { tanaman, pekerja ->
-                // On success, viewModel's UI state will be updated
-            },
-            onError = { error ->
-                // Handle error
+    LaunchedEffect(uiState.snackBarMessage) {
+        uiState.snackBarMessage?.let { message ->
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message)
+                viewModel.resetSnackbarMessage()
             }
-        )
+        }
     }
 
     Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
+        modifier = modifier,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(padding)
+                .padding(16.dp)
+        ) {
             CostumeTopAppBar(
-                title = DestinasiInsertAktivitas.titleRes,
+                title = "Insert Aktivitas",
                 canNavigateBack = true,
-                scrollBehavior = scrollBehavior,
-                navigateUp = navigateBack
+            )
+
+            InsertBodyAktivitas(
+                uiState = uiState,
+                tanamanList = uiState.tanamanList,
+                pekerjaList = uiState.pekerjaList,
+                onValueChange = { updateEvent ->
+                    viewModel.updateAktivitas(updateEvent)
+                },
+                onClick = {
+                    viewModel.insertAktivitas()
+                    onNavigate()
+                }
             )
         }
-    ) { innerPadding ->
-        EntryBody(
-            insertUiState = viewModel.uiState,
-            onAktivitasValueChange = viewModel::updateAktivitasState,
-            onSaveClick = {
-                coroutineScope.launch {
-                    viewModel.insertAktivitas(
-                        onSuccess = navigateBack,
-                        onError = { /* Handle error (e.g., show a snackbar or toast) */ }
-                    )
-                }
-            },
-            modifier = Modifier
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
-        )
     }
 }
 
-
-
 @Composable
-fun EntryBody(
-    insertUiState: InsertUiStateAkt,
-    onAktivitasValueChange: (InsertUiEventAktivitas) -> Unit,
-    onSaveClick: () -> Unit,
-    modifier: Modifier = Modifier
+fun InsertBodyAktivitas(
+    modifier: Modifier = Modifier,
+    uiState: AktivitasUiState,
+    tanamanList: List<Tanaman>,
+    pekerjaList: List<Pekerja>,
+    onValueChange: (AktivitasEvent) -> Unit,
+    onClick: () -> Unit
 ) {
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        FormInput(
-            insertUiEvent = insertUiState.insertUiEventAkt, // Correct reference
-            onValueChange = onAktivitasValueChange,
-            tanamanList = insertUiState.availableTanaman,  // Tanaman list from ViewModel
-            pekerjaList = insertUiState.availablePekerja,  // Pekerja list from ViewModel
-            modifier = Modifier.fillMaxWidth()
+        FormAktivitas(
+            aktivitasEvent = uiState.aktivitasEvent,
+            onValueChange = onValueChange,
+            errorState = uiState.isEntryValid,
+            tanamanList = tanamanList,
+            pekerjaList = pekerjaList
         )
-
         Button(
-            onClick = onSaveClick,
+            onClick = onClick,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Save")
+            Text(text = "Simpan")
         }
     }
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormInput(
-    insertUiEvent: InsertUiEventAktivitas,
-    modifier: Modifier = Modifier,
-    onValueChange: (InsertUiEventAktivitas) -> Unit = {},
-    enabled: Boolean = true,
-    tanamanList: List<Tanaman> = emptyList(), // List of Tanaman from ViewModel
-    pekerjaList: List<Pekerja> = emptyList()  // List of Pekerja from ViewModel
+fun FormAktivitas(
+    aktivitasEvent: AktivitasEvent,
+    onValueChange: (AktivitasEvent) -> Unit,
+    errorState: AktivitasFormErrorState,
+    tanamanList: List<Tanaman>,
+    pekerjaList: List<Pekerja>,
+    modifier: Modifier = Modifier
 ) {
     var expandedTanaman by remember { mutableStateOf(false) }
     var expandedPekerja by remember { mutableStateOf(false) }
-    var selectedTanaman by remember { mutableStateOf(insertUiEvent.id_tanaman) }
-    var selectedPekerja by remember { mutableStateOf(insertUiEvent.id_pekerja) }
 
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = modifier.fillMaxWidth()
     ) {
-        // ID Aktivitas TextField
         OutlinedTextField(
-            value = insertUiEvent.id_aktivitas,
-            onValueChange = { onValueChange(insertUiEvent.copy(id_aktivitas = it)) },
-            label = { Text("ID Aktivitas") },
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
+            value = aktivitasEvent.id_aktivitas,
+            onValueChange = {
+                onValueChange(aktivitasEvent.copy(id_aktivitas = it))
+            },
+            label = { Text("Id Aktivitas") },
+            isError = errorState.id_aktivitas != null,
+            placeholder = { Text("Masukkan ID Aktivitas") }
         )
+        Text(text = errorState.id_aktivitas ?: "", color = Color.Red)
 
-        // ID Tanaman Dropdown
-        OutlinedTextField(
-            value = insertUiEvent.id_tanaman,
-            onValueChange = { onValueChange(insertUiEvent.copy(id_tanaman = it)) },
-            label = { Text("ID Tanaman") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        OutlinedTextField(
-            value = insertUiEvent.id_pekerja,
-            onValueChange = { onValueChange(insertUiEvent.copy(id_pekerja = it)) },
-            label = { Text("ID Pekerja") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        // Tanggal Aktivitas TextField
-        OutlinedTextField(
-            value = insertUiEvent.tanggal_aktivitas,
-            onValueChange = { onValueChange(insertUiEvent.copy(tanggal_aktivitas = it)) },
-            label = { Text("Tanggal Aktivitas") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        // Deskripsi Aktivitas TextField
-        OutlinedTextField(
-            value = insertUiEvent.deskripsi_aktivitas,
-            onValueChange = { onValueChange(insertUiEvent.copy(deskripsi_aktivitas = it)) },
-            label = { Text("Deskripsi Aktivitas") },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
-
-        // Informasi untuk Pengisian Data
-        if (enabled) {
-            Text(
-                text = "Isi Semua Data!",
-                modifier = Modifier.padding(12.dp)
+        ExposedDropdownMenuBox(
+            expanded = expandedTanaman,
+            onExpandedChange = { expandedTanaman = !expandedTanaman }
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
+                value = tanamanList.find { it.id_tanaman == aktivitasEvent.id_tanaman }?.nama_tanaman
+                    ?: "",
+                onValueChange = {},
+                label = { Text("Pilih Tanaman") },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTanaman)
+                },
+                readOnly = true,
+                isError = errorState.id_tanaman != null
             )
-        }
 
-        Divider(
-            thickness = 8.dp,
-            modifier = Modifier.padding(12.dp)
+            ExposedDropdownMenu(
+                expanded = expandedTanaman,
+                onDismissRequest = { expandedTanaman = false }
+            ) {
+                tanamanList.forEach { tanaman ->
+                    DropdownMenuItem(
+                        onClick = {
+                            expandedTanaman = false
+                            onValueChange(aktivitasEvent.copy(id_tanaman = tanaman.id_tanaman))
+                        },
+                        text = { Text(tanaman.nama_tanaman) }
+                    )
+                }
+            }
+        }
+        Text(text = errorState.id_tanaman ?: "", color = Color.Red)
+
+        ExposedDropdownMenuBox(
+            expanded = expandedPekerja,
+            onExpandedChange = { expandedPekerja = !expandedPekerja }
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
+                value = pekerjaList.find { it.id_pekerja == aktivitasEvent.id_pekerja }?.nama_pekerja
+                    ?: "",
+                onValueChange = {},
+                label = { Text("Pilih Pekerja") },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedPekerja)
+                },
+                readOnly = true,
+                isError = errorState.id_pekerja != null
+            )
+
+            ExposedDropdownMenu(
+                expanded = expandedPekerja,
+                onDismissRequest = { expandedPekerja = false }
+            ) {
+                pekerjaList.forEach { pekerja ->
+                    DropdownMenuItem(
+                        onClick = {
+                            expandedPekerja = false
+                            onValueChange(aktivitasEvent.copy(id_pekerja = pekerja.id_pekerja))
+                        },
+                        text = { Text(pekerja.nama_pekerja) }
+                    )
+                }
+            }
+        }
+        Text(text = errorState.id_pekerja ?: "", color = Color.Red)
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = aktivitasEvent.tanggal_aktivitas,
+            onValueChange = {
+                onValueChange(aktivitasEvent.copy(tanggal_aktivitas = it))
+            },
+            label = { Text("Tanggal Aktivitas") },
+            isError = errorState.tanggal_aktivitas != null,
+            placeholder = { Text("Masukkan Tanggal Aktivitas") }
         )
+        Text(text = errorState.tanggal_aktivitas ?: "", color = Color.Red)
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = aktivitasEvent.deskripsi_aktivitas,
+            onValueChange = {
+                onValueChange(aktivitasEvent.copy(deskripsi_aktivitas = it))
+            },
+            label = { Text("Deskripsi Aktivitas") },
+            isError = errorState.deskripsi_aktivitas != null,
+            placeholder = { Text("Masukkan Deskripsi") }
+        )
+        Text(text = errorState.deskripsi_aktivitas ?: "", color = Color.Red)
     }
 }

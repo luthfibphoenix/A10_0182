@@ -177,7 +177,8 @@ fun PengelolaHalaman(
         // Insert Aktivitas
         composable(DestinasiInsertAktivitas.route) {
             InsertAktivitasScreen(
-                navigateBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onNavigate = { }
             )
         }
 
@@ -210,7 +211,7 @@ fun PengelolaHalaman(
             val idAktivitas = backStackEntry.arguments?.getString(DestinasiAktivitasUpdate.AKTIVITAS)
             idAktivitas?.let {
                 UpdateAktivitasScreen(
-                    navigateBack = { navController.popBackStack() },
+                    onBack = { navController.popBackStack() },
                     onNavigate = { navController.popBackStack() }
                 )
             } ?: navController.popBackStack()

@@ -37,8 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.model.Aktivitas
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
-import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
-import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailAktUiState
+import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailAktivitasUiState
 import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.DetailAktivitasViewModel
 
 
@@ -90,12 +89,12 @@ fun DetailViewAktivitas(
 @Composable
 fun BodyDetailAktivitas(
     retryAction: () -> Unit,
-    detailAktivitasUiState: DetailAktUiState,
+    detailAktivitasUiState: DetailAktivitasUiState,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit
 ) {
     when (detailAktivitasUiState) {
-        is DetailAktUiState.Loading -> {
+        is DetailAktivitasUiState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -103,7 +102,7 @@ fun BodyDetailAktivitas(
                 CircularProgressIndicator()
             }
         }
-        is DetailAktUiState.Error -> {
+        is DetailAktivitasUiState.Error -> {
             Box(
                 modifier = modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -120,7 +119,7 @@ fun BodyDetailAktivitas(
                 }
             }
         }
-        is DetailAktUiState.Success -> {
+        is DetailAktivitasUiState.Success -> {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
