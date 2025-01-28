@@ -59,7 +59,7 @@ fun PertanianApp(
             Text(
                 text = "Selamat Datang di Pertanian App!",
                 style = MaterialTheme.typography.bodyLarge,
-                color = Color.Gray,  // Or use MaterialTheme.colorScheme.onBackground
+                color = Color.DarkGray,  // Or use MaterialTheme.colorScheme.onBackground
                 modifier = Modifier.padding(16.dp)
             )
 
