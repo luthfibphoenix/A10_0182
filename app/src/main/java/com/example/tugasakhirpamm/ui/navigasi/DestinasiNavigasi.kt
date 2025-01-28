@@ -1,11 +1,11 @@
 package com.example.tugasakhirpamm.ui.navigasi
 
 interface DestinasiNavigasi {
-    val route : String
-    val titleRes : String
+    val route: String
+    val titleRes: String
 }
 
-//AKTIVITAS
+// AKTIVITAS
 object DestinasiDetailAktivitas : DestinasiNavigasi {
     override val route = "detail_aktivitas"
     override val titleRes = "Detail Aktivitas"
@@ -13,8 +13,8 @@ object DestinasiDetailAktivitas : DestinasiNavigasi {
     val routeWithArg = "$route/{$AKTIVITAS}"
 }
 
-object DestinasiHomeAktivitas: DestinasiNavigasi {
-    override val route ="home_aktivitas"
+object DestinasiHomeAktivitas : DestinasiNavigasi {
+    override val route = "home_aktivitas"
     override val titleRes = "Home Aktivitas"
 }
 
@@ -25,12 +25,12 @@ object DestinasiInsertAktivitas : DestinasiNavigasi {
 
 object DestinasiAktivitasUpdate : DestinasiNavigasi {
     override val route = "update_aktivitas"
-    override val titleRes = "Update Aktivitas" // Updated title to reflect 'Pekerja'
+    override val titleRes = "Update Aktivitas"
     const val AKTIVITAS = "idAktivitas"
     val routeWithArg = "$route/{$AKTIVITAS}"
 }
 
-//CATATAN
+// CATATAN
 object DestinasiDetailCatatan : DestinasiNavigasi {
     override val route = "detail_catatan"
     override val titleRes = "Detail Catatan"
@@ -55,7 +55,7 @@ object DestinasiCatatanUpdate : DestinasiNavigasi {
     val routeWithArg = "$route/{$CATATAN}"
 }
 
-//PEKERJA
+// PEKERJA
 object DestinasiDetailPekerja : DestinasiNavigasi {
     override val route = "detail_pekerja"
     override val titleRes = "Detail Pekerja"
@@ -63,8 +63,8 @@ object DestinasiDetailPekerja : DestinasiNavigasi {
     val routeWithArg = "$route/{$PEKERJA}"
 }
 
-object DestinasiHomePekerja: DestinasiNavigasi {
-    override val route ="home_pekerja"
+object DestinasiHomePekerja : DestinasiNavigasi {
+    override val route = "home_pekerja"
     override val titleRes = "Home Pekerja"
 }
 
@@ -75,12 +75,12 @@ object DestinasiInsertPekerja : DestinasiNavigasi {
 
 object DestinasiPekerjaUpdate : DestinasiNavigasi {
     override val route = "update_pekerja"
-    override val titleRes = "Update Pekerja" // Updated title to reflect 'Pekerja'
-    const val PEKERJA = "id Pekerja"
+    override val titleRes = "Update Pekerja"
+    const val PEKERJA = "idPekerja"  // Ganti 'id Pekerja' menjadi 'idPekerja'
     val routeWithArg = "$route/{$PEKERJA}"
 }
 
-//TANAMAN
+// TANAMAN
 object DestinasiDetailTanaman : DestinasiNavigasi {
     override val route = "detail_tanaman"
     override val titleRes = "Detail Tanaman"
@@ -88,16 +88,14 @@ object DestinasiDetailTanaman : DestinasiNavigasi {
     val routeWithArg = "$route/{$TANAMAN}"
 }
 
-object DestinasiHomeTanaman: DestinasiNavigasi {
-    override val route ="home_tanaman"
+object DestinasiHomeTanaman : DestinasiNavigasi {
+    override val route = "home_tanaman"
     override val titleRes = "Home Tanaman"
 }
 
-
-object DestinasiInsertTanaman: DestinasiNavigasi {
+object DestinasiInsertTanaman : DestinasiNavigasi {
     override val route = "insert_tanaman"
-    override val titleRes = "Insert Tamaman"
-
+    override val titleRes = "Insert Tanaman"  // Perbaiki penulisan "Tamaman" menjadi "Tanaman"
 }
 
 object DestinasiTanamanUpdate : DestinasiNavigasi {
