@@ -137,6 +137,15 @@ fun FormInput(
             singleLine = true
         )
 
+        OutlinedTextField(
+            value = insertUiEvent.kontak,
+            onValueChange = { onValueChange(insertUiEvent.copy(kontak = it)) },
+            label = { Text("Kontak") },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+
         if (enabled) {
             Text(
                 text = "Isi Semua Data!",

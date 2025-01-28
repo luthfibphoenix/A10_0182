@@ -65,7 +65,8 @@ class InsertPekerjaViewModel(private val pekerjaRepository: PekerjaRepository) :
 fun InsertUiEventPekerja.toPekerja(): Pekerja = Pekerja(
     id_pekerja = idPekerja,
     nama_pekerja = namaPekerja,
-    jabatan = jabatan
+    jabatan = jabatan,
+    kontak = kontak
 )
 
 fun Pekerja.toUiStatePekerja(): InsertUiStatePkr = InsertUiStatePkr(
@@ -75,13 +76,15 @@ fun Pekerja.toUiStatePekerja(): InsertUiStatePkr = InsertUiStatePkr(
 fun Pekerja.toInsertUiEventPkr(): InsertUiEventPekerja = InsertUiEventPekerja(
     idPekerja = id_pekerja,
     namaPekerja = nama_pekerja,
-    jabatan = jabatan
+    jabatan = jabatan,
+    kontak = kontak
 )
 
 data class InsertUiEventPekerja(
     val idPekerja: String = "",
     val namaPekerja: String = "",
-    val jabatan: String = ""
+    val jabatan: String = "",
+    val kontak: String = ""
 )
 
 data class InsertUiStatePkr(

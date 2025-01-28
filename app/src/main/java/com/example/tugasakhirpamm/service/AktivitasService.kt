@@ -30,6 +30,6 @@ interface AktivitasService {
     suspend fun updateAktivitas(@Path("id_aktivitas") idAktivitas: String, @Body aktivitas: Aktivitas)
 
     @DELETE("/api/aktivitas/{id_aktivitas}")
-    suspend fun deleteAktivitas(@Path("id_aktivitas") idAktivitas: String): Response<Aktivitas>
+    suspend fun deleteAktivitas(@Path("id_aktivitas") idAktivitas: String): Response<Void>
 }
 

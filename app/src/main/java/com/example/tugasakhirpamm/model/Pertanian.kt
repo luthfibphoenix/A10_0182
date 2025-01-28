@@ -40,7 +40,9 @@ data class Pekerja(
     @SerialName("nama_pekerja")
     val nama_pekerja : String,
 
-    val jabatan : String
+    val jabatan : String,
+
+    val kontak : String
 )
 
 @Serializable
