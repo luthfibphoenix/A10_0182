@@ -3,12 +3,17 @@ package com.example.tugasakhirpamm.ui.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -64,91 +69,116 @@ fun HomeView(
 
         Spacer(Modifier.height(40.dp))
 
-        // Buttons Layout
-        Column(
+        // Buttons Grid Layout
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(16.dp)
         ) {
             // Tanaman Button
-            Button(
-                onClick = { onTanamanButton() },
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(8.dp)
-                    .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
-            ) {
-                Icon(Icons.Default.Search, contentDescription = "Tanaman", tint = Color.White)
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = "Tanaman",
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
+            item {
+                Button(
+                    onClick = { onTanamanButton() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp) // Atur tinggi tombol
+                        .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(Icons.Default.Search, contentDescription = "Tanaman", tint = Color.White)
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = "Tanaman",
+                            fontSize = 20.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Pekerja Button
-            Button(
-                onClick = { onPekerjaButton() },
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(8.dp)
-                    .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
-            ) {
-                Icon(Icons.Default.Person, contentDescription = "Pekerja", tint = Color.White)
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = "Pekerja",
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
+            item {
+                Button(
+                    onClick = { onPekerjaButton() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(Icons.Default.Person, contentDescription = "Pekerja", tint = Color.White)
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = "Pekerja",
+                            fontSize = 20.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Aktivitas Button
-            Button(
-                onClick = { onAktivitasButton() },
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(8.dp)
-                    .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
-            ) {
-                Icon(Icons.Default.CheckCircle, contentDescription = "Aktivitas", tint = Color.White)
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = "Aktivitas",
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
+            item {
+                Button(
+                    onClick = { onAktivitasButton() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(Icons.Default.CheckCircle, contentDescription = "Aktivitas", tint = Color.White)
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = "Aktivitas",
+                            fontSize = 20.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Catatan Button
-            Button(
-                onClick = { onCatatanButton() },
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .padding(8.dp)
-                    .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
-            ) {
-                Icon(Icons.Default.Check, contentDescription = "Catatan", tint = Color.White)
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    text = "Catatan",
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold
-                )
+            item {
+                Button(
+                    onClick = { onCatatanButton() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(Icons.Default.Check, contentDescription = "Catatan", tint = Color.White)
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = "Catatan",
+                            fontSize = 20.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
         }
     }
