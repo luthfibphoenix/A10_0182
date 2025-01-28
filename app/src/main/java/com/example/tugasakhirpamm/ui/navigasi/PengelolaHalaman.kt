@@ -234,7 +234,8 @@ fun PengelolaHalaman(
         // Insert Catatan
         composable(DestinasiInsertCatatan.route) {
             InsertCatatanScreen(
-                navigateBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onNavigate = { navController.popBackStack() }
             )
         }
 
@@ -267,7 +268,7 @@ fun PengelolaHalaman(
             val idCatatan = backStackEntry.arguments?.getString(DestinasiCatatanUpdate.CATATAN)
             idCatatan?.let {
                 UpdateCatatanScreen(
-                    navigateBack = { navController.popBackStack() },
+                    onBack = { navController.popBackStack() },
                     onNavigate = { navController.popBackStack() }
                 )
             } ?: navController.popBackStack()

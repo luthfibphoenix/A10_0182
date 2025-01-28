@@ -119,7 +119,7 @@ fun BodyDetailCatatan(
                 }
             } ?: run {
                 // Handle the case when pekerja is null
-                Text("Pekerja data is not available.")
+                Text("Tanaman data is not available.")
             }
         }
     }
@@ -145,15 +145,15 @@ fun ItemDetailCatatan(
         Column(
             modifier = modifier.padding(16.dp)
         ) {
-            ComponentDetailPekerja(judul = "Id Pekerja", isinya = catatan.id_panen)
+            ComponentDetailCatatan(judul = "Id Panen", isinya = catatan.id_panen)
             Spacer(modifier = Modifier.padding(4.dp))
-            ComponentDetailPekerja(judul = "Nama Pekerja", isinya = catatan.id_tanaman)
+            ComponentDetailCatatan(judul = "Id Tanaman", isinya = catatan.id_tanaman)
             Spacer(modifier = Modifier.padding(4.dp))
-            ComponentDetailPekerja(judul = "Jabatan", isinya = catatan.tanggal_panen)
+            ComponentDetailCatatan(judul = "Jumlah", isinya = catatan.tanggal_panen)
             Spacer(modifier = Modifier.padding(4.dp))
-            ComponentDetailPekerja(judul = "Tanggal Panen", isinya = catatan.jumlah_panen)
+            ComponentDetailCatatan(judul = "Tanggal Panen", isinya = catatan.jumlah_panen)
             Spacer(modifier = Modifier.padding(4.dp))
-            ComponentDetailPekerja(judul = "Jumlah Panen", isinya = catatan.keterangan)
+            ComponentDetailCatatan(judul = "Keterangan", isinya = catatan.keterangan)
             Spacer(modifier = Modifier.padding(10.dp))
 
             Button(
@@ -180,7 +180,7 @@ fun ItemDetailCatatan(
 }
 
 @Composable
-fun ComponentDetailPekerja(
+fun ComponentDetailCatatan(
     modifier: Modifier = Modifier,
     judul: String,
     isinya: String

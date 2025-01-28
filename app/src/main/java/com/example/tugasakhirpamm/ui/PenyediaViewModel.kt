@@ -14,7 +14,6 @@ import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.InsertAktivitasViewMode
 import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.UpdateAktivitasViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.DetailCatatanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.HomeCatatanViewModel
-import com.example.tugasakhirpamm.ui.viewmodel.Catatan.InsertCatatanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.UpdateCatatanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.DetailPekerjaViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Pekerja.HomePekerjaViewModel
@@ -24,6 +23,7 @@ import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.DetailTanamanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.HomeTanamanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.InsertTanamanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.UpdateTanamanViewModel
+import com.example.tugasakhirpamm.ui.viewmodel.catatan.InsertCatatanViewModel
 
 object PenyediaViewModel {
     val Factory = viewModelFactory {
@@ -123,7 +123,7 @@ object PenyediaViewModel {
         // UpdateCatatanViewModel
         initializer {
             val aplikasiPertanian = AplikasiPertanian() // Get application instance
-            UpdateCatatanViewModel(createSavedStateHandle(), aplikasiPertanian.container.catatanRepository)
+            UpdateCatatanViewModel(createSavedStateHandle(), aplikasiPertanian.container.catatanRepository, aplikasiPertanian.container.tanamanRepository)
         }
     }
 }

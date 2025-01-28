@@ -5,7 +5,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,49 +23,52 @@ import com.example.tugasakhirpamm.ui.viewmodel.Aktivitas.UpdateAktivitasViewMode
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.UpdateCatatanViewModel
 import kotlinx.coroutines.launch
 
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateCatatanScreen(
+    onBack: () -> Unit,
+    onNavigate: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: UpdateCatatanViewModel = viewModel(factory = PenyediaViewModel.Factory),
-    navigateBack: () -> Unit,
-    onNavigate: () -> Unit
+    viewModel: UpdateCatatanViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
-    // Access the UI state from the ViewModel
-    val insertUiState = viewModel.updateUiStateCatatan
+    val uiState = viewModel.updateUiState
+    val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
-    // Scaffold for UI layout
+    LaunchedEffect(uiState.snackBarMessage) {
+        uiState.snackBarMessage?.let { message ->
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message)
+                viewModel.resetSnackbarMessage()
+            }
+        }
+    }
+
     Scaffold(
         modifier = modifier,
-        topBar = {
-            // Custom top bar for navigation
-            CostumeTopAppBar(
-                title = DestinasiCatatanUpdate.titleRes,
-                canNavigateBack = true,
-                navigateUp = navigateBack
-            )
-        }
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { padding ->
-        // Column that holds the form
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
-                .padding(15.dp)
+                .padding(16.dp)
         ) {
-            com.example.tugasakhirpamm.ui.view.Catatan.EntryBody(
-                insertUiState = insertUiState,
-                onCatatanValueChange = { updatedCatatan ->
-                    viewModel.updateState(updatedCatatan)
+            CostumeTopAppBar(
+                title = "Update Catatan",
+                canNavigateBack = true
+            )
+
+            InsertBodyCatatan(
+                uiState = uiState,
+                tanamanList = uiState.tanamanList,
+                onValueChange = { updatedEvent ->
+                    viewModel.updateState(updatedEvent)
                 },
-                onSaveClick = {
+                onClick = {
                     coroutineScope.launch {
                         viewModel.updateCatatan()
-                        onNavigate()
+                        onNavigate() // Navigasi setelah data diperbarui
                     }
                 }
             )

@@ -204,26 +204,31 @@ fun PekerjaCard(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = pekerja.nama_pekerja,
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Spacer(Modifier.weight(1f))
-                IconButton(onClick = {onDeleteClick(pekerja)}) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = null,
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = pekerja.id_pekerja,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        text = pekerja.nama_pekerja,
+                        style = MaterialTheme.typography.titleLarge
                     )
                 }
 
                 Text(
-                    text = pekerja.id_pekerja,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
                     text = pekerja.jabatan,
                     style = MaterialTheme.typography.titleMedium
                 )
+
+                IconButton(onClick = { onDeleteClick(pekerja) }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete"
+                    )
+                }
             }
         }
     }

@@ -7,79 +7,97 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhirpamm.model.Catatan
+import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.repository.CatatanRepository
+import com.example.tugasakhirpamm.repository.TanamanRepository
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiCatatanUpdate
+import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanEvent
+import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanFormErrorState
+import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanUiState
+import com.example.tugasakhirpamm.ui.viewmodel.catatan.toCatatan
 import kotlinx.coroutines.launch
 
 class UpdateCatatanViewModel(
     savedStateHandle: SavedStateHandle,
-    private val catatanRepository: CatatanRepository
-) : ViewModel() {
+    private val catatanRepository: CatatanRepository,
+    private val tanamanRepository: TanamanRepository
+): ViewModel() {
 
-    var updateUiStateCatatan by mutableStateOf(InsertUiStateCat())
+    var tanamanList by mutableStateOf<List<Tanaman>>(emptyList())
+        private set
+
+    var updateUiState by mutableStateOf(CatatanUiState())
         private set
 
     private val _idCatatan: String = checkNotNull(savedStateHandle[DestinasiCatatanUpdate.CATATAN])
 
     init {
         viewModelScope.launch {
-            // Fetch the catatan by ID from repository and update the state
+            // Fetch catatan data by ID and update the UI state
             val catatan = catatanRepository.getCatatanById(_idCatatan)
-            updateUiStateCatatan = catatan.toUiStateCatUpdate()
-        }
-    }
-
-    fun updateCatatan(onSuccess: () -> Unit = {}, onError: (Throwable) -> Unit = {}) {
-        viewModelScope.launch {
-            try {
-                // Validate the input data before trying to update
-                val updatedCatatan = updateUiStateCatatan.insertUiEventCat.toCatatan()
-
-                if (updatedCatatan.id_panen.isBlank() || updatedCatatan.id_tanaman.isBlank() ||
-                    updatedCatatan.tanggal_panen.isBlank() || updatedCatatan.jumlah_panen.isBlank() ||
-                    updatedCatatan.keterangan.isBlank()) {
-
-                    updateUiStateCatatan = updateUiStateCatatan.copy(
-                        errorMessage = "Semua field harus diisi"
-                    )
-                    onError(IllegalArgumentException("Semua field harus diisi"))
-                    return@launch
-                }
-
-                // Proceed with the update
-                catatanRepository.updateCatatan(_idCatatan, updatedCatatan)
-                onSuccess()
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                updateUiStateCatatan = updateUiStateCatatan.copy(
-                    errorMessage = "Terjadi kesalahan saat mengupdate catatan"
+            if (catatan != null) {
+                updateUiState = catatan.toUiStateCatatan() // Assuming toUiStateCatatan() expects a Catatan object
+            } else {
+                updateUiState = updateUiState.copy(
+                    snackBarMessage = "Catatan tidak ditemukan"
                 )
-                onError(e)
             }
         }
+
+        viewModelScope.launch {
+            // Fetch tanaman list and update the UI state
+            val tanamanListFromRepo = tanamanRepository.getTanaman() // Get full list, not just first item
+            updateUiState = updateUiState.copy(tanamanList = tanamanListFromRepo)
+        }
     }
 
-    fun updateState(updatedCatatan: InsertUiEventCatatan) {
-        updateUiStateCatatan = InsertUiStateCat(
-            insertUiEventCat = updatedCatatan
+    fun updateState(CatatanEvent: CatatanEvent) {
+        updateUiState = updateUiState.copy(catatanEvent = CatatanEvent)
+    }
+
+    fun validateFields(): Boolean {
+        val event = updateUiState.catatanEvent
+        val errorState = CatatanFormErrorState(
+            id_panen = if (event.id_panen.isNotBlank()) null else "Id Panen tidak boleh kosong",
+            id_tanaman = if (event.id_tanaman.isNotBlank()) null else "Id Tanaman tidak boleh kosong",
+            tanggal_panen = if (event.tanggal_panen.isNotBlank()) null else "Tanggal Panen tidak boleh kosong",
+            jumlah_panen = if (event.jumlah_panen.isNotBlank()) null else "Jumlah Panen tidak boleh kosong",
+            keterangan = if (event.keterangan.isNotBlank()) null else "Keterangan tidak boleh kosong"
         )
+        updateUiState = updateUiState.copy(isEntryValid = errorState)
+        return errorState.isValid()
+    }
+
+    fun updateCatatan() {
+        val currentEvent = updateUiState.catatanEvent
+        if (validateFields()) {
+            viewModelScope.launch {
+                try {
+                    // Ensure you're passing the correct ID and Catatan object to the update function
+                    catatanRepository.updateCatatan(_idCatatan, currentEvent.toCatatan()) // Pass ID and Catatan object
+                    updateUiState = updateUiState.copy(
+                        snackBarMessage = "Data berhasil diperbarui",
+                        catatanEvent = CatatanEvent(),
+                        isEntryValid = CatatanFormErrorState()
+                    )
+                } catch (e: Exception) {
+                    updateUiState = updateUiState.copy(
+                        snackBarMessage = "Gagal memperbarui data. Periksa koneksi internet."
+                    )
+                }
+            }
+        } else {
+            updateUiState = updateUiState.copy(
+                snackBarMessage = "Periksa kembali data yang dimasukkan"
+            )
+        }
+    }
+
+    fun resetSnackbarMessage() {
+        updateUiState = updateUiState.copy(snackBarMessage = null)
     }
 }
 
-// Extension function to map Catatan to InsertUiStateCat
-fun Catatan.toUiStateCatUpdate(): InsertUiStateCat {
-    return InsertUiStateCat(
-        insertUiEventCat = this.toInsertUiEventCatatan()
-    )
-}
-
-
-// Extension function to map Catatan to InsertUiEventCatatan
-fun Catatan.toInsertUiEventCatatan() = InsertUiEventCatatan(
-    idPanen = this.id_panen,
-    idTanaman = this.id_tanaman,
-    jumlahPanen = this.jumlah_panen,
-    tanggalPanen = this.tanggal_panen,
-    keterangan = this.keterangan
+fun Catatan.toUiStateCatatan(): CatatanUiState = CatatanUiState(
+    catatanEvent = this.toDetailUiEvent() // Ensure this method correctly maps the Catatan object
 )

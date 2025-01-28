@@ -30,7 +30,7 @@ class HomeTanamanViewModel(private val tanaman: TanamanRepository): ViewModel(){
         viewModelScope.launch {
             tanamanUiState = HomeUiState.Loading
             tanamanUiState = try {
-                HomeUiState.Success(tanaman.getTanaman().data)
+                HomeUiState.Success(tanaman.getTanaman())
             } catch (e: IOException){
                 HomeUiState.Error
             } catch (e: HttpException){

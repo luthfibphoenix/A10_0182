@@ -10,6 +10,7 @@ import coil.network.HttpException
 import com.example.tugasakhirpamm.model.Catatan
 import com.example.tugasakhirpamm.repository.CatatanRepository
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiDetailCatatan
+import com.example.tugasakhirpamm.ui.viewmodel.catatan.CatatanEvent
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -60,4 +61,14 @@ class DetailCatatanViewModel(
             }
         }
     }
+}
+
+fun Catatan.toDetailUiEvent(): CatatanEvent{
+    return CatatanEvent(
+        id_panen = id_panen,
+        id_tanaman = id_tanaman,
+        tanggal_panen = tanggal_panen,
+        jumlah_panen = jumlah_panen,
+        keterangan = keterangan
+    )
 }
