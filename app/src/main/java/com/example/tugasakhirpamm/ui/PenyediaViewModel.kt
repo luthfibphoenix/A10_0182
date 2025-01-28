@@ -109,7 +109,8 @@ object PenyediaViewModel {
         initializer {
             val aplikasiPertanian = AplikasiPertanian() // Get application instance
             InsertCatatanViewModel(
-                aplikasiPertanian.container.catatanRepository
+                aplikasiPertanian.container.catatanRepository,
+                aplikasiPertanian.container.tanamanRepository
             )
         }
 

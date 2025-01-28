@@ -1,5 +1,6 @@
 package com.example.tugasakhirpamm.ui.view.Catatan
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,16 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
 import com.example.tugasakhirpamm.ui.navigasi.DestinasiInsertCatatan
-import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.InsertCatatanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.InsertUiEventCatatan
 import com.example.tugasakhirpamm.ui.viewmodel.Catatan.InsertUiStateCat
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,6 +42,7 @@ fun InsertCatatanScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val errorMessage = viewModel.uiState.errorMessage
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -57,7 +56,7 @@ fun InsertCatatanScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Optional action for floating button, e.g., navigation or adding new item */ },
+                onClick = { /* Fungsi Tambahan jika diperlukan */ },
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(18.dp)
             ) {
@@ -71,9 +70,12 @@ fun InsertCatatanScreen(
             onSaveClick = {
                 coroutineScope.launch {
                     viewModel.insertCatatan(
-                        onSuccess = navigateBack,
+                        onSuccess = {
+                            Log.d("InsertCatatanScreen", "Catatan berhasil disimpan")
+                            navigateBack()
+                        },
                         onError = { error ->
-                            // Handle error, maybe show a toast/snackbar
+                            Log.e("InsertCatatanScreen", "Error: ${error.message}")
                         }
                     )
                 }
@@ -82,6 +84,15 @@ fun InsertCatatanScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .fillMaxWidth()
+        )
+    }
+
+    // Menampilkan pesan error jika ada
+    errorMessage?.let {
+        Text(
+            text = it,
+            color = MaterialTheme.colorScheme.error,
+            modifier = Modifier.padding(16.dp)
         )
     }
 }
@@ -123,7 +134,6 @@ fun FormInput(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // ID Panen TextField
         OutlinedTextField(
             value = insertUiEvent.idPanen,
             onValueChange = { onValueChange(insertUiEvent.copy(idPanen = it)) },
@@ -133,17 +143,15 @@ fun FormInput(
             singleLine = true
         )
 
-        // Jumlah Panen TextField
         OutlinedTextField(
-            value = insertUiEvent.jumlahPanen,
-            onValueChange = { onValueChange(insertUiEvent.copy(jumlahPanen = it)) },
-            label = { Text("Jumlah Panen") },
+            value = insertUiEvent.idTanaman,
+            onValueChange = { onValueChange(insertUiEvent.copy(idTanaman = it)) },
+            label = { Text("ID Tanaman") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
         )
 
-        // Tanggal Panen TextField
         OutlinedTextField(
             value = insertUiEvent.tanggalPanen,
             onValueChange = { onValueChange(insertUiEvent.copy(tanggalPanen = it)) },
@@ -153,28 +161,24 @@ fun FormInput(
             singleLine = true
         )
 
-        // Keterangan TextField
         OutlinedTextField(
-            value = insertUiEvent.keterangan,
-            onValueChange = { onValueChange(insertUiEvent.copy(keterangan = it)) },
-            label = { Text("Keterangan Panen") },
+            value = insertUiEvent.jumlahPanen,
+            onValueChange = { onValueChange(insertUiEvent.copy(jumlahPanen = it)) },
+            label = { Text("Jumlah Panen") },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
         )
 
-        // Informasi untuk Pengisian Data
-        if (enabled) {
-            Text(
-                text = "Isi Semua Data!",
-                modifier = Modifier.padding(12.dp),
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-
-        Divider(
-            thickness = 8.dp,
-            modifier = Modifier.padding(12.dp)
+        OutlinedTextField(
+            value = insertUiEvent.keterangan,
+            onValueChange = { onValueChange(insertUiEvent.copy(keterangan = it)) },
+            label = { Text("Keterangan") },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
         )
+
+        Divider(thickness = 8.dp, modifier = Modifier.padding(12.dp))
     }
 }

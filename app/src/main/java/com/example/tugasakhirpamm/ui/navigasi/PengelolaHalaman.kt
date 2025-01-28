@@ -116,14 +116,14 @@ fun PengelolaHalaman(
             )
         }
 
-// Insert Tanaman
+        // Insert Tanaman
         composable(DestinasiInsertTanaman.route) {
             InsertTanamanScreen(
                 navigateBack = { navController.popBackStack() }
             )
         }
 
-// Detail Tanaman
+        // Detail Tanaman
         composable(
             route = DestinasiDetailTanaman.routeWithArg,
             arguments = listOf(
@@ -134,7 +134,8 @@ fun PengelolaHalaman(
             idTanaman?.let {
                 DetailViewTanaman(
                     navigateBack = { navController.popBackStack() },
-                    onEditButton = { navController.navigate("${DestinasiTanamanUpdate.route}/$idTanaman") }
+                    onEditButton = { navController.navigate("${DestinasiTanamanUpdate.route}/$idTanaman") },
+                    onAddPanenButton = { navController.navigate(DestinasiInsertCatatan.route)}
                 )
             } ?: run {
                 Log.e("Navigasi", "ID Tanaman null")
@@ -142,7 +143,7 @@ fun PengelolaHalaman(
             }
         }
 
-// Update Tanaman
+        // Update Tanaman
         composable(
             route = DestinasiTanamanUpdate.routeWithArg,
             arguments = listOf(
@@ -157,7 +158,6 @@ fun PengelolaHalaman(
                 )
             } ?: navController.popBackStack()
         }
-
 
         // Home Aktivitas
         composable(DestinasiHomeAktivitas.route) {

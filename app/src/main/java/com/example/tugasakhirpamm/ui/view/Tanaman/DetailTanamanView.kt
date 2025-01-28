@@ -2,6 +2,7 @@ package com.example.tugasakhirpamm.ui.view.Tanaman
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,14 +18,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tugasakhirpamm.model.Tanaman
 import com.example.tugasakhirpamm.ui.PenyediaViewModel
 import com.example.tugasakhirpamm.ui.costumwidget.CostumeTopAppBar
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiDetailTanaman
+import com.example.tugasakhirpamm.ui.navigasi.DestinasiNavigasi
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.DetailTanamanViewModel
 import com.example.tugasakhirpamm.ui.viewmodel.Tanaman.DetailTnmUiState
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailViewTanaman(
     navigateBack: () -> Unit,
     onEditButton: () -> Unit,
+    onAddPanenButton: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DetailTanamanViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
@@ -33,7 +39,7 @@ fun DetailViewTanaman(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = "Detail Tanaman", // Example Title
+                title = DestinasiDetailTanaman.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack
@@ -59,7 +65,8 @@ fun DetailViewTanaman(
             onDeleteClick = {
                 viewModel.deleteTanaman()
                 navigateBack()
-            }
+            },
+            onAddPanenButton = onAddPanenButton
         )
     }
 }
@@ -70,6 +77,7 @@ fun BodyDetailTanaman(
     detailUiState: DetailTnmUiState,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit,
+    onAddPanenButton: () -> Unit,
 ) {
     when (detailUiState) {
         is DetailTnmUiState.Loading -> {
@@ -108,6 +116,7 @@ fun BodyDetailTanaman(
                 ItemDetailTanaman(
                     tanaman = detailUiState.tanaman,
                     onDeleteClick = onDeleteClick,
+                    onAddPanenButton =onAddPanenButton,
                     modifier = modifier
                 )
             }
@@ -120,6 +129,7 @@ fun ItemDetailTanaman(
     modifier: Modifier = Modifier,
     tanaman: Tanaman,
     onDeleteClick: () -> Unit,
+    onAddPanenButton: () -> Unit,
 ) {
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
     Card(
@@ -143,13 +153,20 @@ fun ItemDetailTanaman(
             ComponentDetailTanaman(judul = "Deskripsi Tanaman", isinya = tanaman.deskripsi_tanaman)
             Spacer(modifier = Modifier.padding(10.dp))
 
-            OutlinedButton(
+            Button(
                 onClick = {
                     deleteConfirmationRequired = true
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Delete")
+            }
+
+            Button(
+                onClick = onAddPanenButton,
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Text(text = "Add Panen")
             }
 
             if (deleteConfirmationRequired) {
@@ -198,7 +215,7 @@ private fun DeleteConfirmationDialog(
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
-        onDismissRequest = onDeleteCancel,
+        onDismissRequest = {},
         title = { Text("Delete Data") },
         text = { Text("Apakah anda yakin ingin menghapus data?") },
         modifier = modifier,

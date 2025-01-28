@@ -8,10 +8,15 @@ import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
 import com.example.tugasakhirpamm.model.Catatan
 import com.example.tugasakhirpamm.repository.CatatanRepository
+import com.example.tugasakhirpamm.repository.TanamanRepository
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class InsertCatatanViewModel(private val catatanRepository: CatatanRepository) : ViewModel() {
+class InsertCatatanViewModel(
+    private val catatanRepository: CatatanRepository,
+    private val tanamanRepository: TanamanRepository
+
+    ) : ViewModel() {
 
     var uiState by mutableStateOf(InsertUiStateCat())
         private set
@@ -20,6 +25,7 @@ class InsertCatatanViewModel(private val catatanRepository: CatatanRepository) :
     fun updateCatatanState(event: InsertUiEventCatatan) {
         uiState = uiState.copy(insertUiEventCat = event)
     }
+
 
     // Insert new Catatan into the repository
     fun insertCatatan(onSuccess: () -> Unit = {}, onError: (Throwable) -> Unit = {}) {
@@ -98,5 +104,5 @@ data class InsertUiEventCatatan(
 
 data class InsertUiStateCat(
     val insertUiEventCat: InsertUiEventCatatan = InsertUiEventCatatan(),
-    val errorMessage: String? = null // Added errorMessage field
+    val errorMessage: String? = null
 )
